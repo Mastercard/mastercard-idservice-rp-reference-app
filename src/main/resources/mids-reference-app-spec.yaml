@@ -1,0 +1,286 @@
+openapi: 3.0.3
+info:
+  title: Mastercard Id Service Rp API
+  description: >-
+    Mastercard ID Service provides the technology platform and operational
+    service to allow the secure storage and transmission of Digital Identity
+    data from the user to the Relying Party having been verified to a required
+    level of assurance by an Identity Verification Provider.
+  contact:
+    name: API Support
+    email: apisupport@mastercard.com
+    url: 'https://developer.mastercard.com/support/'
+  version: '1.0'
+servers:
+  - url: 'https://api.mastercard.com/mids-rp'
+    description: Production server (uses live data)
+  - url: 'https://sandbox.api.mastercard.com/mids-rp'
+    description: Sandbox server (testing environment)
+tags:
+  - name: Claims Sharing
+    description: Claims sharing related operations
+paths:
+  '/claims/{arid}/identity-attributes':
+    get:
+      summary: Retrieve Identity Attributes
+      tags:
+        - Claims Sharing
+      responses:
+        '200':
+          $ref: '#/components/responses/ClaimsIdentityAttributesSuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      description: Retrieve the Identity Attributes from a given ARID.
+      operationId: retrieveClaimsIdentityAttributes
+      parameters:
+        - $ref: '#/components/parameters/AridParameter'
+components:
+  schemas:
+    ClaimsIdentityAttributes:
+      required:
+        - transactionId
+        - verifiableCredential
+      type: object
+      properties:
+        transactionId:
+          description: UUID representing the MIDS transaction
+          example: 1ec14310-e85c-11ea-adc1-0242ac120002
+          type: string
+          minLength: 36
+          maxLength: 36
+        verifiableCredential:
+          $ref: '#/components/schemas/VerifiableCredential'
+        fraudDetectionMeta:
+          $ref: '#/components/schemas/FraudDetectionResponseMeta'
+    VerifiableCredential:
+      type: object
+      description: An object representing the verified credentials.
+      properties:
+        '@context':
+          type: array
+          example:
+            - 'https://www.w3.org/2018/credentials/v1'
+            - 'https://www.w3.org/2018/credentials/id/v1'
+          items:
+            type: string
+          description: Static Array of Strings from the example.
+        type:
+          type: array
+          example:
+            - VerifiableCredential
+            - ID
+          items:
+            type: string
+          description: Static Array of Strings from the example.
+        issuer:
+          description: URL of the issuer.
+          type: string
+          example: 'https://idservice.com/'
+        issuanceDate:
+          description: >-
+            Date and Time in a RFC3339 format
+            (<YYYY>-<MM>-<DD>T<HH24>:<MI>:<SS>Z).
+          type: string
+          format: date-time
+          example: '2021-01-01T13:23:33Z'
+        credentialSubject:
+          $ref: '#/components/schemas/VerifiableCredentialSubject'
+        proof:
+          $ref: '#/components/schemas/VerifiableCredentialJwsToken'
+    VerifiableCredentialJwsToken:
+      type: object
+      description: An object representing the generated JWS token.
+      properties:
+        jws:
+          description: Generated JWS token of the "credentialSubject" JSON Object.
+          example: eyJraWQiOiJVTklUX1RFU1RfS0VZX0FMSUFTIiwiYWxnIjoiUlMyNTYifQ..
+          type: string
+          minLength: 1
+    VerifiableCredentialSubject:
+      type: object
+      description: An object representing a list of credentials.
+      required:
+        - id
+      properties:
+        id:
+          description: The ID for the credential subject.
+          example: 0a58579bce2c6c4a9e413acaa7c4d53f9002ee69c736626dc9b48db50c6eb8ac
+          type: string
+        claimsAttributes:
+          description: An object representing the claims data
+          type: object
+          example:
+            assuranceLevel: 1
+            lastVerifiedDate: '2021-01-01T13:23:33Z'
+            verifiedAgainstSource: true
+            values:
+              scopeValueName: Value of Scope
+            dataMatch: FULL
+          additionalProperties:
+            $ref: '#/components/schemas/VerifiableCredentialSubjectClaimValue'
+    VerifiableCredentialSubjectClaimValue:
+      type: object
+      description: An object representing a list of credentials.
+      properties:
+        assuranceLevel:
+          description: The assurance level of the claim.
+          example: 1
+          type: integer
+        verifiedAgainstSource:
+          description: >-
+            Flag detailing whether the identity was verified against source or
+            not.
+          example: true
+          type: boolean
+        lastVerifiedDate:
+          description: The last verified date assurance of the claim.
+          type: string
+          format: date-time
+          example: '2021-01-01T13:23:33Z'
+        values:
+          type: object
+          description: The value of the given claim, can be multiple values for a particular claim.
+          example:
+            scopeValueName: Value of Scope
+        dataMatch:
+          description: The data match status result of the claim.
+          type: string
+          example: FULL
+    FraudDetectionResponseMeta:
+      type: object
+      description: An object representing the result of the fraud risk assessment
+      properties:
+        score:
+          $ref: '#/components/schemas/FraudDetectionScore'
+    FraudDetectionScore:
+      type: object
+      description: An object representing the result of the fraud risk assessment
+      properties:
+        value:
+          type: integer
+          example: 0
+          description: The score value. This is 0 for a GREEN result.
+        band:
+          type: string
+          example: GREEN
+          minLength: 3
+          maxLength: 10
+          description: >-
+            The Score Band for the result of the risk assessment.
+            GREEN/YELLOW/RED
+        signals:
+          type: array
+          items:
+            type: string
+            example: anonymous_ip
+            description: The specific signals which caused the above score band
+    ErrorResponse:
+      required:
+        - Errors
+      type: object
+      description: The error response model used by all of our API endpoints
+      properties:
+        Errors:
+          required:
+            - Error
+          type: object
+          description: The error response model used by all of our API endpoints
+          properties:
+            Error:
+              description: a list of Error objects
+              minItems: 1
+              type: array
+              items:
+                type: object
+                properties:
+                  Source:
+                    type: string
+                    description: The source of the problem. i.e where the error occurred
+                    example: mids
+                  ReasonCode:
+                    type: string
+                    description: 'A code defining the error, as defined in documentation'
+                    example: USER_PROFILE_ID_NOT_FOUND
+                  Description:
+                    type: string
+                    description: >-
+                      A description for this specific occurrence of the above
+                      ReasonCode
+                    example: The provided userProfileId does not exist
+                  Recoverable:
+                    type: boolean
+                    description: >-
+                      Whether or not retrying this request could result in a
+                      successful response
+                    example: false
+                  Details:
+                    type: string
+                    description: >-
+                      More details of this specific error. This is an optional
+                      field and is sometimes used to give a more comprehensive
+                      description of the error that has occurred, when required.
+                    example: User X was not found
+  responses:
+    NotFoundError:
+      description: Request didn't match an existing resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            NotFoundExample:
+              $ref: '#/components/examples/NotFoundExample'
+    BadRequestError:
+      description: Something was wrong with the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            BadRequestExampleUserConsent:
+              $ref: '#/components/examples/BadRequestExampleArid'
+    ClaimsIdentityAttributesSuccessResponse:
+      description: Success
+      headers:
+        X-Transaction-ID:
+          schema:
+            type: string
+          description: A random 128-bit UUID representing the transaction
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClaimsIdentityAttributes'
+  examples:
+    NotFoundExample:
+      value:
+        Errors:
+          Error:
+            - Source: mids
+              ReasonCode: NOT_FOUND
+              Description: ARID or consumer key id could not be found
+              Recoverable: false
+              Details: null
+    BadRequestExampleArid:
+      value:
+        Errors:
+          Error:
+            - Source: mids
+              ReasonCode: VALIDATION_ERROR
+              Description: Unexpected value 'null' for arid
+              Recoverable: false
+              Details: null
+  parameters:
+    AridParameter:
+      name: arid
+      in: path
+      description: UUID representing the ARID
+      example: df52649e-4096-456a-bca0-751ee470009f
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 36
+        type: string
+        pattern: >-
+          ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
