@@ -24,6 +24,13 @@
 		<swagger-parser.version>2.0.18</swagger-parser.version>
 		<client-encryption-version>1.4.0</client-encryption-version>
 		<openapi-generator.version>5.1.1</openapi-generator.version>
+		<sonar.organization>mastercard</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>Mastercard_mastercard-idservice-rp-reference-app</sonar.projectKey>
+		<sonar.coverage.exclusions>
+			**/com/mastercard/dis/mids/reference/config/*,
+			**/com/mastercard/dis/mids/reference/interceptor/*
+		</sonar.coverage.exclusions>
 	</properties>
 
 	<dependencies>
@@ -138,6 +145,36 @@
 								<dateLibrary>java8</dateLibrary>
 							</configOptions>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>
+				<configuration>
+					<excludes>
+						<exclude>
+							com.mastercard.dis.mids.reference.config.*
+						</exclude>
+						<exclude>
+							com.mastercard.dis.mids.reference.interceptor.*
+						</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-site</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
