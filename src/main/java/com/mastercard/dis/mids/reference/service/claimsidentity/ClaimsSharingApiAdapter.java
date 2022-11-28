@@ -16,16 +16,17 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.service.claimsidentity;
 
-import com.google.gson.reflect.TypeToken;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.openapitools.client.ApiCallback;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.ApiResponse;
-import org.openapitools.client.Configuration;
 import org.openapitools.client.Pair;
-import org.openapitools.client.model.ClaimsIdentityAttributes;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +36,11 @@ import java.util.Map;
  * Generated code from ClaimsSharingApi.
  * This adapter only contains one change to fix an issue with the existing library.
  */
+@Slf4j
 public class ClaimsSharingApiAdapter {
+    private final OkHttpClient client = new OkHttpClient();
 
     private ApiClient localVarApiClient;
-
-    public ClaimsSharingApiAdapter() {
-        this(Configuration.getDefaultApiClient());
-    }
 
     public ClaimsSharingApiAdapter(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
@@ -58,7 +57,7 @@ public class ClaimsSharingApiAdapter {
     /**
      * Build call for retrieveClaimsIdentityAttributes
      * @param arid UUID representing the ARID (required)
-     * @param _callback Callback for upload/download progress
+     * @param apiCallback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
@@ -69,7 +68,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public okhttp3.Call retrieveClaimsIdentityAttributesCall(String arid, String accessToken,  final ApiCallback _callback) throws ApiException {
+    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, final ApiCallback apiCallback) throws ApiException, IOException {
         Object localVarPostBody = null;
 
         /*
@@ -89,25 +88,41 @@ public class ClaimsSharingApiAdapter {
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+                "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
 
+        final String[] localVarContentTypes = {
+
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+        String[] localVarAuthNames = new String[]{};
         localVarHeaderParams.put("Authorization", "Bearer " +accessToken);
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        if (accessToken.equals("jwt")) {
+            okhttp3.Call localVarCall = localVarApiClient.buildCall(null, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
+            return localVarCall.execute();
+        } else {
+            localVarApiClient.buildCall(null, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
+            Request request = localVarApiClient.buildRequest(null, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
+            log.info("<<--- Claims Identity Attributes Request --->>\n" + request);
+            log.info("<<--- Claims Identity Attributes Path --->>" + localVarPath);
+            Call call = client.newCall(request);
+            return call.execute();
+        }
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call retrieveClaimsIdentityAttributesValidateBeforeCall(String arid, String accessToken, final ApiCallback _callback) throws ApiException {
-
+    private Response retrieveClaimsIdentityAttributesValidateBeforeCall(String arid, String accessToken, final ApiCallback apiCallback) throws ApiException, IOException {
         // verify the required parameter 'arid' is set
         if (arid == null) {
             throw new ApiException("Missing the required parameter 'arid' when calling retrieveClaimsIdentityAttributes(Async)");
         }
-
-
-        okhttp3.Call localVarCall = retrieveClaimsIdentityAttributesCall(arid, accessToken,  _callback);
-        return localVarCall;
-
+        return retrieveClaimsIdentityAttributesCall(arid, accessToken,  apiCallback);
     }
 
     /**
@@ -124,51 +139,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public ClaimsIdentityAttributes retrieveClaimsIdentityAttributes(String arid, String accessToken) throws ApiException {
-        ApiResponse<ClaimsIdentityAttributes> localVarResp = retrieveClaimsIdentityAttributesWithHttpInfo(arid, accessToken);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Retrieve Identity Attributes
-     * Retrieve the Identity Attributes from a given ARID.
-     * @param arid UUID representing the ARID (required)
-     * @return ApiResponse&lt;ClaimsIdentityAttributes&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-    <table summary="Response Details" border="1">
-    <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-    <tr><td> 200 </td><td> Success </td><td>  * X-Transaction-ID - A random 128-bit UUID representing the transaction <br>  </td></tr>
-    <tr><td> 400 </td><td> Something was wrong with the request. </td><td>  -  </td></tr>
-    <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
-    </table>
-     */
-    public ApiResponse<ClaimsIdentityAttributes> retrieveClaimsIdentityAttributesWithHttpInfo(String arid, String accessToken) throws ApiException {
-        okhttp3.Call localVarCall = retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, null);
-        Type localVarReturnType = new TypeToken<ClaimsIdentityAttributes>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Retrieve Identity Attributes (asynchronously)
-     * Retrieve the Identity Attributes from a given ARID.
-     * @param arid UUID representing the ARID (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-    <table summary="Response Details" border="1">
-    <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-    <tr><td> 200 </td><td> Success </td><td>  * X-Transaction-ID - A random 128-bit UUID representing the transaction <br>  </td></tr>
-    <tr><td> 400 </td><td> Something was wrong with the request. </td><td>  -  </td></tr>
-    <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
-    </table>
-     */
-    public okhttp3.Call retrieveClaimsIdentityAttributesAsync(String arid, String accessToken, final ApiCallback<ClaimsIdentityAttributes> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, _callback);
-        Type localVarReturnType = new TypeToken<ClaimsIdentityAttributes>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    public Response retrieveClaimsIdentityAttributes(String arid, String accessToken) throws ApiException, IOException {
+        return retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, null);
     }
 }

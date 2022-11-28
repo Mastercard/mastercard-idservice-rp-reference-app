@@ -16,9 +16,9 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.service.claimsidentity;
 
-import org.openapitools.client.model.ClaimsIdentityAttributes;
+import okhttp3.Response;
 
 public interface ClaimsIdentityService {
 
-    ClaimsIdentityAttributes claimsIdentityAttributes(String arid, String accessToken);
+    Response claimsIdentityAttributes(String arid, String accessToken);
 }

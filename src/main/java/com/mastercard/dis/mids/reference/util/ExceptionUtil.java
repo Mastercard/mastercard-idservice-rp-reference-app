@@ -27,14 +27,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExceptionUtil {
 
-    private final JSON json = new JSON();
-
     public ServiceException logAndConvertToServiceException(ApiException e) {
         log.error("Error while processing request {} {} ", e.getMessage(), e.getResponseBody());
         return new ServiceException(e, deserializeErrors(e.getResponseBody()));
     }
 
     private ErrorResponseErrors deserializeErrors(String body) {
-        return json.deserialize(body, ErrorResponseErrors.class);
+        return JSON.deserialize(body, ErrorResponseErrors.class);
     }
 }

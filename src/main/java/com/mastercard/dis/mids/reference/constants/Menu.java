@@ -29,7 +29,6 @@ public final class Menu {
 
     static {
         MENU_MAP.put("1",  "1)   Claims Identity Attributes");
-        MENU_MAP.put("2",  "2)   Upcoming Flow");
-        MENU_MAP.put("3",  "3)   Exit");
+        MENU_MAP.put("2",  "2)   Exit");
     }
 }
