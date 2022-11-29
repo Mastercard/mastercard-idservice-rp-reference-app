@@ -51,6 +51,8 @@ public class SasAccessTokenApi {
         this.localVarApiClient = apiClient;
     }
 
+
+    @SuppressWarnings("rawtypes")
     public okhttp3.Call createSasAccessTokenCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 

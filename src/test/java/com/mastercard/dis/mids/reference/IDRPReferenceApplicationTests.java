@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,7 +36,7 @@ class IDRPReferenceApplicationTests {
 
 	private static final Map<String, String> MENU_MAP_TEST = new HashMap<>();
 
-	@Before
+	@BeforeAll
 	static void setup() {
 		MENU_MAP_TEST.put("1",  "1)   Claims Identity Attributes");
 		MENU_MAP_TEST.put("2",  "2)   Upcoming Flow");

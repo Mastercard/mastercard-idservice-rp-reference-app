@@ -69,6 +69,8 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
+
+    @SuppressWarnings("rawtypes")
     public okhttp3.Call retrieveClaimsIdentityAttributesCall(String arid, String accessToken,  final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 

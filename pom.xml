@@ -29,7 +29,9 @@
 		<sonar.projectKey>Mastercard_mastercard-idservice-rp-reference-app</sonar.projectKey>
 		<sonar.coverage.exclusions>
 			**/com/mastercard/dis/mids/reference/config/*,
-			**/com/mastercard/dis/mids/reference/interceptor/*
+			**/com/mastercard/dis/mids/reference/interceptor/*,
+			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenResponseDTO.java,
+			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenRequestDTO.java
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -159,6 +161,12 @@
 						</exclude>
 						<exclude>
 							com.mastercard.dis.mids.reference.interceptor.*
+						</exclude>
+						<exclude>
+							com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO
+						</exclude>
+						<exclude>
+							com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO
 						</exclude>
 					</excludes>
 				</configuration>
