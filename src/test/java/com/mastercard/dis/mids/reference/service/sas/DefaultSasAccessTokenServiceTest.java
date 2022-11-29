@@ -100,11 +100,11 @@ class DefaultSasAccessTokenServiceTest {
         verify(apiClientMock, times(1)).execute(any(Call.class), any(Type.class));
         assertAll(
                 () -> assertNotNull(result),
-                () -> assertEquals(ACCESS_TOKEN, result.getAccess_token()),
-                () -> assertEquals(EXPIRES_IN, result.getExpires_in()),
-                () -> assertEquals(ID_TOKEN, result.getId_token()),
+                () -> assertEquals(ACCESS_TOKEN, result.getAccessToken()),
+                () -> assertEquals(EXPIRES_IN, result.getExpiresIn()),
+                () -> assertEquals(ID_TOKEN, result.getIdToken()),
                 () -> assertEquals(SCOPE, result.getScope()),
-                () -> assertEquals(TOKEN_TYPE, result.getToken_type())
+                () -> assertEquals(TOKEN_TYPE, result.getTokenType())
         );
     }
 
@@ -122,11 +122,11 @@ class DefaultSasAccessTokenServiceTest {
 
     private SasAccessTokenResponseDTO getSasAccessTokenResponse() {
         SasAccessTokenResponseDTO sasAccessTokenResponseDTO = new SasAccessTokenResponseDTO();
-        sasAccessTokenResponseDTO.setAccess_token(ACCESS_TOKEN);
-        sasAccessTokenResponseDTO.setExpires_in(EXPIRES_IN);
-        sasAccessTokenResponseDTO.setId_token(ID_TOKEN);
+        sasAccessTokenResponseDTO.setAccessToken(ACCESS_TOKEN);
+        sasAccessTokenResponseDTO.setExpiresIn(EXPIRES_IN);
+        sasAccessTokenResponseDTO.setIdToken(ID_TOKEN);
         sasAccessTokenResponseDTO.setScope(SCOPE);
-        sasAccessTokenResponseDTO.setToken_type(TOKEN_TYPE);
+        sasAccessTokenResponseDTO.setTokenType(TOKEN_TYPE);
         return sasAccessTokenResponseDTO;
     }
 }

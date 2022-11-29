@@ -96,8 +96,8 @@ public class IDRPReferenceApplication implements CommandLineRunner {
 		try {
 			log.info("<<--- Claims Identity Attributes Started --->>");
 			SasAccessTokenResponseDTO sasAccessTokenResponseDTO = idRpReference.callSasAccessToken(SasAccessTokenRequestExample.sasAccessTokenRequestExample(authCode));
-			log.info("<<--- Access Token --->>"+sasAccessTokenResponseDTO.getAccess_token());
-			idRpReference.callClaimsIdentityAttributes(arid, sasAccessTokenResponseDTO.getAccess_token());
+			log.info("<<--- Access Token --->>"+sasAccessTokenResponseDTO.getAccessToken());
+			idRpReference.callClaimsIdentityAttributes(arid, sasAccessTokenResponseDTO.getAccessToken());
 			log.info("<<--- Claims Identity Attributes Successfully Ended --->>");
 		}
 		catch (Exception e) {

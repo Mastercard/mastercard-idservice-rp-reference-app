@@ -16,9 +16,14 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference;
 
+import com.mastercard.dis.mids.reference.component.IDRPReference;
+import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
+import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
@@ -27,14 +32,22 @@ import java.util.Map;
 import static com.mastercard.dis.mids.reference.constants.Menu.MENU_MAP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class IDRPReferenceApplicationTests {
 
 	private static final Map<String, String> MENU_MAP_TEST = new HashMap<>();
+
+	@InjectMocks
+	IDRPReferenceApplication idrpReferenceApplication;
+
+	@Mock
+	IDRPReference idRpReference;
 
 	@BeforeAll
 	static void setup() {
@@ -68,5 +81,15 @@ class IDRPReferenceApplicationTests {
 		spyMIDSReferenceApplication.handleOption("2");
 
 		verify(spyMIDSReferenceApplication, times(2)).handleOption(anyString());
+	}
+
+	@Test
+	void perform_performClaimsIdentityAttributes_works() {
+		SasAccessTokenResponseDTO dto = new SasAccessTokenResponseDTO("access",1,"id","lorem","jws");
+
+		doReturn(dto).when(idRpReference).callSasAccessToken(any(SasAccessTokenRequestDTO.class));
+
+		idrpReferenceApplication.performClaimsIdentityAttributes("d9033b93-e333-4d5a-8aee-a50cb14440c4");
+		verify(idRpReference, times(1)).callSasAccessToken(any(SasAccessTokenRequestDTO.class));
 	}
 }

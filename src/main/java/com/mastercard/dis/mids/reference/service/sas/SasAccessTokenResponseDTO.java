@@ -29,18 +29,18 @@ import lombok.NoArgsConstructor;
 public class SasAccessTokenResponseDTO {
 
     @JsonProperty("access_token")
-    private String access_token;
+    private String accessToken;
 
     @JsonProperty("expires_in")
-    private int expires_in;
+    private int expiresIn;
 
     @JsonProperty("id_token")
-    private String id_token;
+    private String idToken;
 
     @JsonProperty("scope")
     private String scope;
 
     @JsonProperty("token_type")
-    private String token_type;
+    private String tokenType;
 
 }
