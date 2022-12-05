@@ -18,21 +18,34 @@ package com.mastercard.dis.mids.reference.util;
 
 import com.mastercard.dis.mids.reference.exception.ServiceException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.client.ApiException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class ExceptionUtilTest {
+
+    @Mock
+    private ApiException apiExceptionMock;
+    @Mock
+    private ExceptionUtil exceptionUtilMock;
+
 
     @Test
     void create_WithApiException_Works() {
-        ApiException apiException = new ApiException();
-        ExceptionUtil exceptionUtil = new ExceptionUtil();
+        String exceptionMessage = "org.openapitools.client.ApiException";
 
-        ServiceException serviceException = exceptionUtil.logAndConvertToServiceException(apiException);
+        when(exceptionUtilMock.logAndConvertToServiceException(apiExceptionMock))
+                .thenReturn(new ServiceException(exceptionMessage));
+
+        ServiceException serviceException = exceptionUtilMock.logAndConvertToServiceException(apiExceptionMock);
 
         assertNotNull(serviceException);
-        assertEquals("org.openapitools.client.ApiException", serviceException.getMessage());
+        assertEquals(exceptionMessage, serviceException.getMessage());
     }
 }

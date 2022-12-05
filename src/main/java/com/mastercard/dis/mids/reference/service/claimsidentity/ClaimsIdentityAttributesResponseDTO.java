@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2022 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.mastercard.dis.mids.reference.constants;
+package com.mastercard.dis.mids.reference.service.claimsidentity;
 
-import lombok.AccessLevel;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.openapitools.client.model.VerifiableCredential;
 
-import java.util.HashMap;
-import java.util.Map;
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ClaimsIdentityAttributesResponseDTO {
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Menu {
-
-    public static final Map<String, String> MENU_MAP = new HashMap<>();
-
-    static {
-        MENU_MAP.put("1",  "1)   Claims Identity Attributes");
-        MENU_MAP.put("2",  "2)   Exit");
-    }
+    @JsonProperty("verifiableCredential")
+    private VerifiableCredential verifiableCredential;
 }

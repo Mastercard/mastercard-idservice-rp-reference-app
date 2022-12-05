@@ -21,7 +21,7 @@ import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenService;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.client.model.ClaimsIdentityAttributes;
+import okhttp3.Response;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,7 +31,7 @@ public class IDRPReference {
     private final ClaimsIdentityService claimsIdentityService;
     private final SasAccessTokenService sasAccessTokenService;
 
-    public ClaimsIdentityAttributes callClaimsIdentityAttributes(String arid, String accessToken) {
+    public Response callClaimsIdentityAttributes(String arid, String accessToken) {
         return claimsIdentityService.claimsIdentityAttributes(arid, accessToken);
     }
 

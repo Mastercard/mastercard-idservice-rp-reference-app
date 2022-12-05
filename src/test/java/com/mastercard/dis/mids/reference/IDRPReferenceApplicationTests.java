@@ -16,15 +16,26 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mastercard.dis.mids.reference.component.IDRPReference;
+import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsIdentityAttributesResponseDTO;
+import com.mastercard.dis.mids.reference.service.claimsidentity.signingvalidator.SigningValidator;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,11 +43,14 @@ import java.util.Map;
 import static com.mastercard.dis.mids.reference.constants.Menu.MENU_MAP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class IDRPReferenceApplicationTests {
@@ -49,11 +63,13 @@ class IDRPReferenceApplicationTests {
 	@Mock
 	IDRPReference idRpReference;
 
-	@BeforeAll
-	static void setup() {
+	@Mock
+	SigningValidator signingValidator;
+
+	@BeforeEach
+	void setup() {
 		MENU_MAP_TEST.put("1",  "1)   Claims Identity Attributes");
-		MENU_MAP_TEST.put("2",  "2)   Upcoming Flow");
-		MENU_MAP_TEST.put("3",  "3)   Exit");
+		MENU_MAP_TEST.put("2",  "2)   Exit");
 	}
 
 	@Test
@@ -75,7 +91,8 @@ class IDRPReferenceApplicationTests {
 
 	@Test
 	void console_handleOption_works() {
-		IDRPReferenceApplication spyMIDSReferenceApplication = spy(new IDRPReferenceApplication(null));
+
+		IDRPReferenceApplication spyMIDSReferenceApplication = mock(IDRPReferenceApplication.class);
 
 		spyMIDSReferenceApplication.handleOption("1");
 		spyMIDSReferenceApplication.handleOption("2");
@@ -85,11 +102,27 @@ class IDRPReferenceApplicationTests {
 
 	@Test
 	void perform_performClaimsIdentityAttributes_works() {
-		SasAccessTokenResponseDTO dto = new SasAccessTokenResponseDTO("access",1,"id","lorem","jws");
+		SasAccessTokenRequestDTO tokenRequestDTO = new SasAccessTokenRequestDTO("authorization_code", "", "", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer", "", "");
+		SasAccessTokenResponseDTO tokenResponseDTO = new SasAccessTokenResponseDTO("access",1,"id","lorem","jws");
+		Request mockRequest = new Request.Builder()
+				.url("https://mock_test_url.com")
+				.build();
+		Response response = new Response.Builder()
+				.request(mockRequest)
+				.protocol(Protocol.HTTP_2)
+				.code(200)
+				.message("mock response")
+				.body(ResponseBody.create(
+						"{'body':'success'}",
+						MediaType.get("application/json; charset=utf-8")
+				))
+				.build();
 
-		doReturn(dto).when(idRpReference).callSasAccessToken(any(SasAccessTokenRequestDTO.class));
+		when(idRpReference.callSasAccessToken(tokenRequestDTO)).thenReturn(tokenResponseDTO);
+		when(idRpReference.callClaimsIdentityAttributes("", tokenRequestDTO.toString())).thenReturn(response);
 
-		idrpReferenceApplication.performClaimsIdentityAttributes("d9033b93-e333-4d5a-8aee-a50cb14440c4");
-		verify(idRpReference, times(1)).callSasAccessToken(any(SasAccessTokenRequestDTO.class));
+		idrpReferenceApplication.performClaimsIdentityAttributes("", "","", "","");
+
+		verify(idRpReference, times(1)).callSasAccessToken(tokenRequestDTO);
 	}
 }

@@ -83,7 +83,7 @@ class DefaultSasAccessTokenServiceTest {
         headersList = new ArrayList<>();
         headersList.add(AppConstants.X_MIDS_USERAUTH_SESSIONID);
         headers.put(AppConstants.X_MIDS_USERAUTH_SESSIONID, headersList);
-        when(apiClientMock.buildCall(anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).thenReturn(mock(Call.class));
+        when(apiClientMock.buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).thenReturn(mock(Call.class));
         SessionContext.create(X_MIDS_USERAUTH_SESSIONID);
     }
 
@@ -96,7 +96,7 @@ class DefaultSasAccessTokenServiceTest {
 
         SasAccessTokenResponseDTO result = sasAccessTokenService.sasAccessTokenResponse(SasAccessTokenRequestExample.sasAccessTokenRequestExample(AUTH_CODE));
 
-        verify(apiClientMock, atLeastOnce()).buildCall(anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
+        verify(apiClientMock, atLeastOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
         verify(apiClientMock, times(1)).execute(any(Call.class), any(Type.class));
         assertAll(
                 () -> assertNotNull(result),
@@ -116,7 +116,7 @@ class DefaultSasAccessTokenServiceTest {
         SasAccessTokenRequestDTO sasAccessTokenRequestDTO = new SasAccessTokenRequestDTO();
 
         assertThrows(ServiceException.class, () -> sasAccessTokenService.sasAccessTokenResponse(sasAccessTokenRequestDTO));
-        verify(apiClientMock, atLeastOnce()).buildCall(anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
+        verify(apiClientMock, atLeastOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
         verify(apiClientMock, atLeastOnce()).execute(any(Call.class), any(Type.class));
     }
 
