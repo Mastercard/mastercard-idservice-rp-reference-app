@@ -11,8 +11,14 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.interfaces.RSAPrivateKey;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class EncryptionUtilsTest {
@@ -36,5 +42,27 @@ class EncryptionUtilsTest {
 
         assertThatThrownBy(() -> EncryptionUtils.jweEncrypt("{\"dataKey\":\"dataValue\"}", createdResource, "encryptionCertificateFingerPrint"))
                 .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void Should_return_service_exception_when_cert_file_not_found() {
+        String filePath = "cert_file_name_not_found_mock.cert";
+        Resource createdResource = new FileSystemResource(filePath);
+
+        Exception exception = assertThrows(ServiceException.class, () -> {
+            EncryptionUtils.jweEncrypt("{\"dataKey\":\"dataValue\"}", createdResource, "encryptionCertificateFingerPrint");
+        });
+
+        assertNotNull(exception);
+        assertEquals(filePath, exception.getMessage());
+    }
+
+    @Test
+    void Should_throw_parse_exception() throws IOException {
+        RSAPrivateKey privateKey = mock(RSAPrivateKey.class);
+        Exception exception = assertThrows(ServiceException.class, () -> {
+            EncryptionUtils.jweDecrypt("{\"dataKey\":\"dataValue\"}", privateKey);
+        });
+        assertNotNull(exception);
     }
 }
