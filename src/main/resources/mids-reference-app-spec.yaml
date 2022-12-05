@@ -9,16 +9,16 @@ info:
   contact:
     name: API Support
     email: apisupport@mastercard.com
-    url: 'https://developer.mastercard.com/support/'
+    url: 'https://developer.mastercard.com/support'
   version: '1.0'
 servers:
-  - url: 'https://api.mastercard.com/mids-rp'
+  - url: 'https://api.mastercard.com/idservice-rp'
     description: Production server (uses live data)
-  - url: 'https://sandbox.api.mastercard.com/mids-rp'
+  - url: 'https://sandbox.api.mastercard.com/idservice-rp'
     description: Sandbox server (testing environment)
 tags:
   - name: Claims Sharing
-    description: Claims sharing related operations
+    description: Claims sharing related operations.
 paths:
   '/claims/{arid}/identity-attributes':
     get:
@@ -32,10 +32,13 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '404':
           $ref: '#/components/responses/NotFoundError'
-      description: Retrieve the Identity Attributes from a given ARID.
+      description: |
+        Retrieve the Identity attributes from a given ARID.
+        **This API is mandatory.**
       operationId: retrieveClaimsIdentityAttributes
       parameters:
         - $ref: '#/components/parameters/AridParameter'
+        - $ref: '#/components/parameters/XEncryptedPayload'
 components:
   schemas:
     ClaimsIdentityAttributes:
@@ -45,7 +48,7 @@ components:
       type: object
       properties:
         transactionId:
-          description: UUID representing the MIDS transaction
+          description: UUID representing the MIDS transaction.
           example: 1ec14310-e85c-11ea-adc1-0242ac120002
           type: string
           minLength: 36
@@ -65,7 +68,8 @@ components:
             - 'https://www.w3.org/2018/credentials/id/v1'
           items:
             type: string
-          description: Static Array of Strings from the example.
+            example: "https://www.w3.org/2018/credentials/v1, https://www.w3.org/2018/credentials/id/v1"
+            description: Static Array of Strings from the example.
         type:
           type: array
           example:
@@ -73,7 +77,8 @@ components:
             - ID
           items:
             type: string
-          description: Static Array of Strings from the example.
+            example: "VerifiableCredential, ID"
+            description: Static Array of Strings from the example.
         issuer:
           description: URL of the issuer.
           type: string
@@ -100,7 +105,7 @@ components:
           minLength: 1
     VerifiableCredentialSubject:
       type: object
-      description: An object representing a list of credentials.
+      description: A serialized object representing a list of Credential Subjects.
       required:
         - id
       properties:
@@ -112,12 +117,16 @@ components:
           description: An object representing the claims data
           type: object
           example:
-            assuranceLevel: 1
-            lastVerifiedDate: '2021-01-01T13:23:33Z'
-            verifiedAgainstSource: true
-            values:
-              scopeValueName: Value of Scope
-            dataMatch: FULL
+            legalName:
+              assuranceLevel: 1
+              lastVerifiedDate: '2021-01-01T13:23:33Z'
+              claims:
+                legalName: "SMITH,JOHN"
+              dataMatch: FULL
+              address:
+                claims:
+                  address: "NO_DATA"
+                dataMatch: "NOT_AVAILABLE"
           additionalProperties:
             $ref: '#/components/schemas/VerifiableCredentialSubjectClaimValue'
     VerifiableCredentialSubjectClaimValue:
@@ -129,9 +138,9 @@ components:
           example: 1
           type: integer
         verifiedAgainstSource:
-          description: >-
-            Flag detailing whether the identity was verified against source or
-            not.
+          description: Indicates identity verification against the source.
+
+
           example: true
           type: boolean
         lastVerifiedDate:
@@ -139,24 +148,24 @@ components:
           type: string
           format: date-time
           example: '2021-01-01T13:23:33Z'
-        values:
+        claims:
           type: object
           description: The value of the given claim, can be multiple values for a particular claim.
           example:
             scopeValueName: Value of Scope
         dataMatch:
-          description: The data match status result of the claim.
+          description: The data matches the status result of the claim.
           type: string
           example: FULL
     FraudDetectionResponseMeta:
       type: object
-      description: An object representing the result of the fraud risk assessment
+      description: An object representing the result of the fraud risk assessment.
       properties:
         score:
           $ref: '#/components/schemas/FraudDetectionScore'
     FraudDetectionScore:
       type: object
-      description: An object representing the result of the fraud risk assessment
+      description: An object representing the result of the fraud risk assessment.
       properties:
         value:
           type: integer
@@ -175,18 +184,18 @@ components:
           items:
             type: string
             example: anonymous_ip
-            description: The specific signals which caused the above score band
+            description: The specific signals which caused the above score band.
     ErrorResponse:
       required:
         - Errors
       type: object
-      description: The error response model used by all of our API endpoints
+      description: The error response model used by all the API endpoints.
       properties:
         Errors:
           required:
             - Error
           type: object
-          description: The error response model used by all of our API endpoints
+          description: The error response model used by all the API endpoints.
           properties:
             Error:
               description: a list of Error objects
@@ -197,11 +206,11 @@ components:
                 properties:
                   Source:
                     type: string
-                    description: The source of the problem. i.e where the error occurred
+                    description: The source of the problem. That is where the error occurred.
                     example: mids
                   ReasonCode:
                     type: string
-                    description: 'A code defining the error, as defined in documentation'
+                    description: A code defining the error, as defined in documentation
                     example: USER_PROFILE_ID_NOT_FOUND
                   Description:
                     type: string
@@ -259,7 +268,7 @@ components:
           Error:
             - Source: mids
               ReasonCode: NOT_FOUND
-              Description: ARID or consumer key id could not be found
+              Description: ARID or consumer key ID could not be found.
               Recoverable: false
               Details: null
     BadRequestExampleArid:
@@ -268,7 +277,7 @@ components:
           Error:
             - Source: mids
               ReasonCode: VALIDATION_ERROR
-              Description: Unexpected value 'null' for arid
+              Description: Unexpected value 'null' for ARID.
               Recoverable: false
               Details: null
   parameters:
@@ -284,3 +293,11 @@ components:
         type: string
         pattern: >-
           ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
+    XEncryptedPayload:
+      in: header
+      name: X-Encrypted-Payload
+      example: true
+      description: |
+        Indicator that request is encrypted or to indicate that client is able to receive a encrypted response. If not set, payload will treated as plaintext.
+      schema:
+        type: boolean
