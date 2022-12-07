@@ -18,8 +18,8 @@ package com.mastercard.dis.mids.reference.component;
 
 import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsIdentityService;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
-import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenService;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
+import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenService;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Response;
 import org.springframework.stereotype.Component;

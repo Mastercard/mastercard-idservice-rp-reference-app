@@ -19,26 +19,34 @@ package com.mastercard.dis.mids.reference.util;
 import com.mastercard.dis.mids.reference.exception.ServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.client.ApiException;
+import org.openapitools.client.model.ErrorResponseErrors;
+import org.openapitools.client.model.ErrorResponseErrorsErrorInner;
+
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExceptionUtilTest {
 
-    @Mock
-    private ApiException apiExceptionMock;
-    @Mock
-    private ExceptionUtil exceptionUtilMock;
-
+    @InjectMocks
+    private ApiException apiException;
+    @InjectMocks
+    private ExceptionUtil exceptionUtil;
 
     @Test
     void create_WithApiException_Works() {
         String exceptionMessage = "org.openapitools.client.ApiException";
+        ApiException apiExceptionMock = mock(ApiException.class);
+        ExceptionUtil exceptionUtilMock = mock(ExceptionUtil.class);
+
 
         when(exceptionUtilMock.logAndConvertToServiceException(apiExceptionMock))
                 .thenReturn(new ServiceException(exceptionMessage));
@@ -48,4 +56,19 @@ class ExceptionUtilTest {
         assertNotNull(serviceException);
         assertEquals(exceptionMessage, serviceException.getMessage());
     }
+
+    @Test
+    void run_WithApiException_When_cant_deserialize() {
+        String exceptionMessage = "org.openapitools.client.ApiException";
+        ErrorResponseErrorsErrorInner errorInner = new ErrorResponseErrorsErrorInner().source("mids").reasonCode("").description("").recoverable(false).details("");
+        ErrorResponseErrors errorResponseErrors = new ErrorResponseErrors().addErrorItem(errorInner);
+        apiException = new ApiException(500,exceptionMessage, new HashMap<>(), errorResponseErrors.toString());
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            exceptionUtil.logAndConvertToServiceException(apiException);
+        });
+
+        assertNotNull(exception);
+    }
+
 }

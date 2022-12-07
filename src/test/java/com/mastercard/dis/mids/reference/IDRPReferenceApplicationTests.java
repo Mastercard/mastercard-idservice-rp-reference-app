@@ -16,11 +16,7 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mastercard.dis.mids.reference.component.IDRPReference;
-import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsIdentityAttributesResponseDTO;
-import com.mastercard.dis.mids.reference.service.claimsidentity.signingvalidator.SigningValidator;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
 import okhttp3.MediaType;
@@ -28,14 +24,12 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,13 +37,10 @@ import java.util.Map;
 import static com.mastercard.dis.mids.reference.constants.Menu.MENU_MAP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -122,4 +113,5 @@ class IDRPReferenceApplicationTests {
 
 		verify(idRpReference, times(1)).callSasAccessToken(tokenRequestDTO);
 	}
+
 }
