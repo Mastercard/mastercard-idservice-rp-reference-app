@@ -28,7 +28,7 @@ public class SigningValidator {
             JWSObject jwsObject = getJwsObjectWithHashedPayload(jws);
             return verifySignature(jwsObject);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | CertificateException |
-                ParseException exception) {
+                 ParseException exception) {
             throw new ServiceException("[Couldn't verify signature] " + exception.getMessage(), exception);
         }
     }

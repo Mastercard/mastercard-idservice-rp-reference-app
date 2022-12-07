@@ -17,7 +17,7 @@ limitations under the License.
 package com.mastercard.dis.mids.reference.component;
 
 import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsIdentityService;
-import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestExample;
+import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,6 @@ class IDRPReferenceTest {
 
     private static final String ARID = "d22a5b3e-dbb5-4f77-ac74-30040fef4561";
     private static final String ACCESS_TOKEN = "jwt";
-    private static final String AUTH_CODE = "7189112-8987654";
 
     @InjectMocks
     IDRPReference idRpReference;
@@ -59,9 +58,16 @@ class IDRPReferenceTest {
     @Test
     @DisplayName("Call SAS Access Token API - Valid - Successful")
     void callSasAccessToken_Valid_SuccessfulCall() {
-        idRpReference.callSasAccessToken(SasAccessTokenRequestExample.sasAccessTokenRequestExample(AUTH_CODE));
+        SasAccessTokenRequestDTO sasAccessTokenRequestDTO = new SasAccessTokenRequestDTO();
+        sasAccessTokenRequestDTO.setClientAssertionType("urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
+        sasAccessTokenRequestDTO.setClientAssertion("eyJraWQiOiJjdkF4d0FqaENJRnY5MFZnQ3M0b2o1Wmp2SmoyUlRXSC1sWHh3X2diMWRmMWV");
+        sasAccessTokenRequestDTO.setGrantType("authorization_code");
+        sasAccessTokenRequestDTO.setCodeVerifier("my-code-verifier-string");
+        sasAccessTokenRequestDTO.setCode("eyJ4NXQjUzI1NiI6Ild...");
+        sasAccessTokenRequestDTO.setRedirectUrl("https://venomsoft.ie");
+        idRpReference.callSasAccessToken(sasAccessTokenRequestDTO);
 
-        verify(sasAccessTokenServiceMock, times(1)).sasAccessTokenResponse(eq(SasAccessTokenRequestExample.sasAccessTokenRequestExample(AUTH_CODE)));
+        verify(sasAccessTokenServiceMock, times(1)).sasAccessTokenResponse(eq(sasAccessTokenRequestDTO));
         verifyNoMoreInteractions(sasAccessTokenServiceMock);
     }
 }

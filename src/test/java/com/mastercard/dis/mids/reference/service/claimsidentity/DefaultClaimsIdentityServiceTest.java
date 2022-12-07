@@ -54,8 +54,8 @@ class DefaultClaimsIdentityServiceTest {
     private static final String ARID = "df52649e-4096-456a-bca0-751ee470009f";
     private static final String ACCESS_TOKEN = "jwt";
 
-    Map<String, List<String>> headers;
-    List<String> headersList;
+     Map<String, List<String>> headers;
+     List<String> headersList;
     @InjectMocks
     private DefaultClaimsIdentityService defaultClaimsIdentityService;
     @Mock
@@ -63,6 +63,7 @@ class DefaultClaimsIdentityServiceTest {
     @Mock
     private ExceptionUtil exceptionUtilMock;
     private OkHttpClient httpClient;
+
 
     @BeforeEach
     void setUp() throws Exception {
@@ -95,4 +96,6 @@ class DefaultClaimsIdentityServiceTest {
         Response result = defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN);
         verify(apiClientMock, atMostOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
     }
+
+
 }

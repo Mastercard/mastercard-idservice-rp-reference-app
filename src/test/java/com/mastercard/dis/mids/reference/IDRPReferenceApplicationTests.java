@@ -63,9 +63,6 @@ class IDRPReferenceApplicationTests {
 	@Mock
 	IDRPReference idRpReference;
 
-	@Mock
-	SigningValidator signingValidator;
-
 	@BeforeEach
 	void setup() {
 		MENU_MAP_TEST.put("1",  "1)   Claims Identity Attributes");
@@ -103,7 +100,7 @@ class IDRPReferenceApplicationTests {
 	@Test
 	void perform_performClaimsIdentityAttributes_works() {
 		SasAccessTokenRequestDTO tokenRequestDTO = new SasAccessTokenRequestDTO("authorization_code", "", "", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer", "", "");
-		SasAccessTokenResponseDTO tokenResponseDTO = new SasAccessTokenResponseDTO("access",1,"id","lorem","jws");
+		SasAccessTokenResponseDTO tokenResponseDTO = new SasAccessTokenResponseDTO("access",1,"id","lorem","jws", "token", "300");
 		Request mockRequest = new Request.Builder()
 				.url("https://mock_test_url.com")
 				.build();

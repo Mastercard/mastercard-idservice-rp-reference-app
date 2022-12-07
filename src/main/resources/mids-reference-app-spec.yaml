@@ -139,8 +139,6 @@ components:
           type: integer
         verifiedAgainstSource:
           description: Indicates identity verification against the source.
-
-
           example: true
           type: boolean
         lastVerifiedDate:
