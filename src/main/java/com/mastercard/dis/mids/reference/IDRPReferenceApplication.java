@@ -205,14 +205,15 @@ public class IDRPReferenceApplication implements CommandLineRunner {
         }
     }
 
-    void verifyJWSProof(String identityAttrResponseBody) {
+    boolean verifyJWSProof(String identityAttrResponseBody) {
+        boolean matches = false;
         try {
             ClaimsIdentityAttributesResponseDTO responseDTO = new ObjectMapper()
                     .registerModule(new JavaTimeModule()) // deserialize dates
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // ignore unnecessary properties
                     .readValue(identityAttrResponseBody, ClaimsIdentityAttributesResponseDTO.class);
 
-            boolean matches = new SigningValidator().verify(responseDTO.getVerifiableCredential().getProof().getJws());
+            matches = new SigningValidator().verify(responseDTO.getVerifiableCredential().getProof().getJws());
             if (matches) {
                 log.info("<<--- Signature Verification Successful --->>");
             } else {
@@ -222,6 +223,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
             log.info("<<--- Signature Verification Failed --->>");
             log.info(ERROR + e.getMessage());
         }
+        return matches;
     }
 
     void pressAnyKey() {
