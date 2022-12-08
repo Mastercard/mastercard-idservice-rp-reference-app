@@ -1,11 +1,17 @@
 package com.mastercard.dis.mids.reference.service.claimsidentity;
 
+import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -18,6 +24,19 @@ class ClaimsSharingApiAdapterTest {
 
     @InjectMocks
     private ClaimsSharingApiAdapter claimsSharingApiAdapter;
+
+    @Test
+    void Should_return_not_found_response_for_given_arid() throws IOException, ApiException {
+        String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
+        String accessTokenMock = "jwt";
+
+        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient",  new ApiClient());
+
+        Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
+
+        assertNotNull(response);
+        assertEquals(404, response.code());
+    }
 
     @Test
     void Should_return_null_when_arid_null() {

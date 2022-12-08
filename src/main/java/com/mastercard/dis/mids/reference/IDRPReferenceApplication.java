@@ -46,7 +46,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
     private final IDRPReference idRpReference;
 
     private boolean exit = false;
-    private Scanner scanner;
+    private Scanner scanner = new Scanner(System.in, "UTF-8");;
 
     private String arid;
     private String redirectUri;
@@ -61,14 +61,12 @@ public class IDRPReferenceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        scanner = new Scanner(System.in, "UTF-8");
 
         while (!exit) {
             showMenu();
             handleOption(scanner.nextLine());
             pressAnyKey();
         }
-        System.exit(0);
     }
 
     void showMenu() {

@@ -24,6 +24,7 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -172,6 +173,18 @@ class IDRPReferenceApplicationTests {
 		idrpReferenceApplication.handleOption("2");
 
 		assertTrue(scanner.hasNext());
+	}
+
+	@Test
+	void Should_cover_menu_flow(){
+		String data = String.format("%s\n%s\n%s\n%s", "0", "\t", "2", "\t");
+		InputStream stream = new ByteArrayInputStream(data.getBytes());
+		Scanner streamScanner = new Scanner(new BufferedInputStream(stream), "UTF-8");
+
+		ReflectionTestUtils.setField(idrpReferenceApplication, "scanner",  streamScanner);
+		scanner = (Scanner) ReflectionTestUtils.getField(idrpReferenceApplication, "scanner");
+
+		idrpReferenceApplication.run();
 	}
 
 	private String getAridMock(){

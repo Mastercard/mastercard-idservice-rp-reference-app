@@ -28,7 +28,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 /**
  * This is ApiClient configuration, it will read properties from application.properties and create instance of ApiClient.
@@ -63,7 +68,7 @@ public class ApiClientConfiguration {
     public ApiClient apiClient( ) {
         ApiClient client = new ApiClient();
         try {
-            PrivateKey signingKey = AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
+            PrivateKey signingKey = getPrivateKey();
             client.setBasePath(basePath);
             client.setDebugging(true);
             client.setReadTimeout(40000);
@@ -77,5 +82,9 @@ public class ApiClientConfiguration {
             log.error("Error occurred while configuring ApiClient", e);
             throw new ServiceException("Error occurred while configuring ApiClient", e);
         }
+    }
+
+    protected PrivateKey getPrivateKey() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+        return AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
     }
 }
