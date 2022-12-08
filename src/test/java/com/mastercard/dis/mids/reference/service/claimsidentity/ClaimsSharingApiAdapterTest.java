@@ -26,11 +26,24 @@ class ClaimsSharingApiAdapterTest {
     private ClaimsSharingApiAdapter claimsSharingApiAdapter;
 
     @Test
-    void Should_return_not_found_response_for_given_arid() throws IOException, ApiException {
+    void Should_return_not_found_response_for_given_arid_with_jwt() throws IOException, ApiException {
         String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
         String accessTokenMock = "jwt";
 
         ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient",  new ApiClient());
+
+        Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
+
+        assertNotNull(response);
+        assertEquals(404, response.code());
+    }
+
+    @Test
+    void Should_return_not_found_response_for_given_arid() throws IOException, ApiException {
+        String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
+        String accessTokenMock = "";
+
+        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient", new ApiClient());
 
         Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
 

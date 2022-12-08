@@ -161,6 +161,21 @@ class IDRPReferenceApplicationTests {
 	}
 
 	@Test
+	void Should_go_through_all_application_flow_when_selecting_one_with_wrong_input(){
+
+		String data = String.format("%s\n%s\n%s\n%s\n%s\n%s%s\n%s\n%s\n%s", "", getAridMock(), "", getClienteAssertionMock(), "", getCodeMock(), "", getCodeVerifierMock(), "", getRedirectUriMock());
+		InputStream stream = new ByteArrayInputStream(data.getBytes());
+		Scanner streamScanner = new Scanner(new BufferedInputStream(stream), "UTF-8");
+
+		ReflectionTestUtils.setField(idrpReferenceApplication, "scanner",  streamScanner);
+		scanner = (Scanner) ReflectionTestUtils.getField(idrpReferenceApplication, "scanner");
+
+		idrpReferenceApplication.handleOption("1");
+
+		assertFalse(scanner.hasNext());
+	}
+
+	@Test
 	void Should_exit_application_flow_when_selecting_two(){
 
 		String data = String.format("%s\n%s\n%s\n%s\n%s", getAridMock(), getClienteAssertionMock(), getCodeMock(), getCodeVerifierMock(), getRedirectUriMock());
