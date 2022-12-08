@@ -97,7 +97,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
 
     private void clientAssertionLogScanner() {
         log.info("Please enter client assertion and press Enter");
-    takeClientAssertion(scanner.nextLine());
+        takeClientAssertion(scanner.nextLine());
     }
 
     private void takeClientAssertion(String clientAssertionScanned) {
