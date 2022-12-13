@@ -72,6 +72,7 @@ public class ApiClientConfiguration {
             client.setBasePath(basePath);
             client.setDebugging(true);
             client.setReadTimeout(40000);
+            client.addDefaultHeader("downstream-route", "qe");
 
             return client.setHttpClient(client.getHttpClient()
                     .newBuilder()
