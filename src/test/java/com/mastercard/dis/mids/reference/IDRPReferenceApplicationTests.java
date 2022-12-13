@@ -99,7 +99,7 @@ class IDRPReferenceApplicationTests {
 	}
 
 	@Test
-	void perform_performClaimsIdentityAttributes_works() {
+	void perform_performClaimsIdentityAttributes_works_with_failed_verifyJWSProof() {
 		SasAccessTokenRequestDTO tokenRequestDTO = new SasAccessTokenRequestDTO("authorization_code", "", "", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer", "", "");
 		SasAccessTokenResponseDTO tokenResponseDTO = new SasAccessTokenResponseDTO("access",1,"id","lorem","jws", "token", "300");
 		Request mockRequest = new Request.Builder()
@@ -117,7 +117,7 @@ class IDRPReferenceApplicationTests {
 				.build();
 
 		when(idRpReference.callSasAccessToken(tokenRequestDTO)).thenReturn(tokenResponseDTO);
-		when(idRpReference.callClaimsIdentityAttributes("", tokenRequestDTO.toString())).thenReturn(response);
+		when(idRpReference.callClaimsIdentityAttributes("", tokenResponseDTO.getAccess_token())).thenReturn(response);
 
 		idrpReferenceApplication.performClaimsIdentityAttributes("", "","", "","");
 
