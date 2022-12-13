@@ -117,6 +117,7 @@ class IDRPReferenceApplicationTests {
 				.build();
 
 		when(idRpReference.callSasAccessToken(tokenRequestDTO)).thenReturn(tokenResponseDTO);
+
 		when(idRpReference.callClaimsIdentityAttributes("", tokenResponseDTO.getAccess_token())).thenReturn(response);
 
 		idrpReferenceApplication.performClaimsIdentityAttributes("", "","", "","");

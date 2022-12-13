@@ -53,7 +53,7 @@ public class SasAccessTokenApi {
     public okhttp3.Call createSasAccessTokenCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback apiCallback) throws ApiException {
         Object localVarPostBody = sasAccessTokenRequest;
 
-        String localVarPath = "/saat-auth/api/oauth2/token";
+        String localVarPath =  "/com-mastercard-saat/saat-auth/api/oauth2/token";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
