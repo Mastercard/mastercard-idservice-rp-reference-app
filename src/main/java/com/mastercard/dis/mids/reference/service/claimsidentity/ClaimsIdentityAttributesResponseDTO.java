@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2022 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,39 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.mastercard.dis.mids.reference.service.sas;
+package com.mastercard.dis.mids.reference.service.claimsidentity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.openapitools.client.model.VerifiableCredential;
 
-@Data
-@Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SasAccessTokenResponseDTO {
+public class ClaimsIdentityAttributesResponseDTO {
 
-    @JsonProperty("access_token")
-    private String access_token;
-
-    @JsonProperty("expires_in")
-    private int expires_in;
-
-    @JsonProperty("id_token")
-    private String id_token;
-
-    @JsonProperty("scope")
-    private String scope;
-
-    @JsonProperty("token_type")
-    private String token_type;
-
-    @JsonProperty("refresh_token")
-    private String refresh_token;
-
-    @JsonProperty("refresh_token_expires_in")
-    private String refreshTokenExpiresIn;
-
+    @JsonProperty("verifiableCredential")
+    private VerifiableCredential verifiableCredential;
 }

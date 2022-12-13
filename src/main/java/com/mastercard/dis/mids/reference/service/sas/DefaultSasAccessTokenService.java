@@ -33,7 +33,6 @@ public class DefaultSasAccessTokenService implements SasAccessTokenService {
     @Autowired
     public DefaultSasAccessTokenService(ApiClient apiClient, ExceptionUtil exceptionUtil) {
         sasAccessTokenApi = new SasAccessTokenApi(apiClient);
-        sasAccessTokenApi.getApiClient().addDefaultHeader("Content-Type",  "application/x-www-form-urlencoded");
         this.exceptionUtil = exceptionUtil;
     }
 
