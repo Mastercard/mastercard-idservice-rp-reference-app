@@ -10,14 +10,11 @@ import org.openapitools.client.ApiException;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class ClaimsSharingApiAdapterTest {
@@ -30,7 +27,7 @@ class ClaimsSharingApiAdapterTest {
         String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
         String accessTokenMock = "jwt";
 
-        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient",  new ApiClient());
+        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient", new ApiClient().setReadTimeout(0));
 
         Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
 
@@ -43,7 +40,7 @@ class ClaimsSharingApiAdapterTest {
         String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
         String accessTokenMock = "";
 
-        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient", new ApiClient());
+        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient", new ApiClient().setReadTimeout(0));
 
         Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
 
@@ -61,7 +58,7 @@ class ClaimsSharingApiAdapterTest {
         });
 
         assertNotNull(exception);
-        assertTrue(ApiException.class.equals(exception.getClass()));
+        assertEquals(ApiException.class, exception.getClass());
     }
 
     @Test
