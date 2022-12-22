@@ -1,4 +1,4 @@
-# Mastercard ID RP Service Reference Implementation
+# RP for Identity Providers Reference Implementation
 
 [![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_mastercard-idservice-rp-reference-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Mastercard_mastercard-idservice-rp-reference-app)
@@ -33,7 +33,7 @@ For more information regarding the program refer to [Id Service](https://idservi
 
 ## Usage <a name="usage"></a>
 ### Prerequisites <a name="prerequisites"></a>
-* [Mastercard Developers Account](https://developer.mastercard.com/dashboard) with access to Mastercard ID Service API
+* [Mastercard Developers Account](https://developer.mastercard.com/dashboard) with access to RP for Identity Providers API
 * A text editor or IDE
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
 * [Spring Boot 2.2+](https://spring.io/projects/spring-boot)
@@ -114,9 +114,9 @@ Now that you have all the dependencies you need, you can generate the sources. T
 Navigate to the test package and right click to  `Run All Tests`
 
 ### Use cases <a name="use-cases"></a>
-Main use cases in Mastercard ID RP Service Reference APIs are Claims Sharing and Oauth2 Access Token.                                                      
+Main use cases in RP for Identity Providers Reference APIs are Claims Sharing and Oauth2 Access Token.                                                      
 
-Below are the different APIs available in Mastercard ID RP Service Reference application:
+Below are the different APIs available in RP for Identity Providers Reference application:
 
 A] [Claims Sharing - Documentation](https://developer.mastercard.com/mastercard-id-for-rp/documentation/api-reference/#apis).
     
@@ -154,7 +154,7 @@ Guides and tutorials can be found [here](https://developer.mastercard.com/master
 ## API Reference <a name="api-reference"></a>
 
 - To develop a client application that consumes a RESTful ID Service API with Spring Boot, refer to the documentation below.
-- [Mastercard ID Service Reference](https://developer.mastercard.com/mastercard-id-service/documentation/api-reference/).
+- [RP for Identity Providers Reference](https://developer.mastercard.com/mastercard-id-service/documentation/api-reference/).
 
 ### Authorization <a name="authorization"></a>
 The `com.mastercard.dis.mids.reference.config` package will provide you API client. These class will take care of adding the correct `Authorization` header before sending the request.
