@@ -35,7 +35,8 @@
 			**/com/mastercard/dis/mids/reference/config/*,
 			**/com/mastercard/dis/mids/reference/interceptor/*,
 			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenResponseDTO.java,
-			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenRequestDTO.java
+			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenRequestDTO.java,
+			**/test/com/mastercard/dis/mids/reference/extension/*
 		</sonar.coverage.exclusions>
 	</properties>
 
