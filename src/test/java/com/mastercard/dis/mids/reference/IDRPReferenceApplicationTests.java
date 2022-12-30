@@ -17,6 +17,8 @@ limitations under the License.
 package com.mastercard.dis.mids.reference;
 
 import com.mastercard.dis.mids.reference.component.IDRPReference;
+import com.mastercard.dis.mids.reference.extension.DisableSystemExit;
+import com.mastercard.dis.mids.reference.extension.SystemExitException;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
 import okhttp3.MediaType;
@@ -43,6 +45,7 @@ import java.util.Scanner;
 import static com.mastercard.dis.mids.reference.constants.Menu.MENU_MAP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -192,6 +195,7 @@ class IDRPReferenceApplicationTests {
 	}
 
 	@Test
+	@DisableSystemExit
 	void Should_cover_menu_flow(){
 		String data = String.format("%s\n%s\n%s\n%s", "0", "\t", "2", "\t");
 		InputStream stream = new ByteArrayInputStream(data.getBytes());
@@ -200,7 +204,11 @@ class IDRPReferenceApplicationTests {
 		ReflectionTestUtils.setField(idrpReferenceApplication, "scanner",  streamScanner);
 		scanner = (Scanner) ReflectionTestUtils.getField(idrpReferenceApplication, "scanner");
 
-		idrpReferenceApplication.run();
+		SystemExitException exitException = assertThrows(SystemExitException.class, () ->
+				idrpReferenceApplication.run()
+		);
+		assertEquals(0, exitException.getStatusCode());
+		assertFalse(scanner.hasNext());
 	}
 
 	private String getAridMock(){
