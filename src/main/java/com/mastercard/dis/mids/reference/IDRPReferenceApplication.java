@@ -67,6 +67,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
             handleOption(scanner.nextLine());
             pressAnyKey();
         }
+        System.exit(0);
     }
 
     void showMenu() {
