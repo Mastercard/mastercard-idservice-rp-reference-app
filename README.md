@@ -33,8 +33,6 @@ For more information regarding the program, refer to [ID Service](https://idserv
 ### References <a name="references"></a>
 * [Mastercard's OAuth Signer library](https://github.com/Mastercard/oauth1-signer-java)
 * [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/using-oauth-1a-to-access-mastercard-apis/)
-* [Mastercard's Payload Encryption/Decryption library](https://github.com/Mastercard/client-encryption-java)
-* [Using Payload Encryption](https://developer.mastercard.com/platform/documentation/security-and-authentication/securing-sensitive-data-using-payload-encryption/)
 
 ## Usage <a name="usage"></a>
 ### Prerequisites <a name="prerequisites"></a>
