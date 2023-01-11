@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +33,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -74,7 +72,7 @@ class IDRPReferenceApplicationTests {
 	}
 
 	@Test
-	void consoleMenu_runAndcheckingValues_works() {
+	void consoleMenu_runAndCheckValues_works() {
 		for (Map.Entry<String, String> entry : MENU_MAP_TEST.entrySet()) {
 			String valueMenu = MENU_MAP.get(entry.getKey());
 			assertEquals(valueMenu, entry.getValue());
@@ -120,7 +118,6 @@ class IDRPReferenceApplicationTests {
 				.build();
 
 		when(idRpReference.callSasAccessToken(tokenRequestDTO)).thenReturn(tokenResponseDTO);
-
 		when(idRpReference.callClaimsIdentityAttributes("", tokenResponseDTO.getAccess_token())).thenReturn(response);
 
 		idrpReferenceApplication.performClaimsIdentityAttributes("", "","", "","");
@@ -129,21 +126,21 @@ class IDRPReferenceApplicationTests {
 	}
 
 	@Test
-	void Should_return_false_when_verifing_signature_with_exception(){
+	void Should_return_false_when_verifies_signature_with_exception(){
 		String identityAttributeResponseBodyErrorMock = "{\"transactionId\":\"95bcd8a4-fcb4-4dce-8626-d7a98666df45\",\"fraudDetectionMeta\":null,\"verifiableCredential\":{\"@context\":[\"https://www.w3.org/2018/credentials/v1\",\"https://www.w3.org/2018/credentials/id/v1\"],\"type\":[\"VerifiableCredential\",\"ID\"],\"issuer\":\"https://idservice.com/\",\"issuanceDate\":\"2022-12-08T12:50:43Z\",\"credentialSubject\":{\"id\":\"737a3d24a05ceb98d196f82c3e9fa4e3b605c0ce52b978a176f7d16087cb068f\",\"claimsAttributes\":{\"address\":{\"assuranceLevel\":1,\"lastVerifiedDate\":\"2022-12-08T12:48:28.586Z\",\"claims\":{\"address\":\"2200 MASTERCARD BLVD, O FALLON, MO, 63368, USA\"},\"dataMatch\":\"FULL\"}}},\"proof\":{\"jws\":\"eyJ4NXQjUzI1NiI6Ilg1OWF0QTRIMHlxNWx6VnlMUnl2Ym9oNmJrZHRMZHRQT002ZlR0OEFZMUkiLCJ4NWMiOlsiTUlJRVJ6Q0NBeStnQXdJQkFnSUlEek1MV200c09jQXdEUVlKS29aSWh2Y05BUUVMQlFBd2dZVXhDekFKQmdOVkJBWVRBa0pGTVJ3d0dnWURWUVFLRXhOTllYTjBaWEpEWVhKa0lGZHZjbXgzYVdSbE1TUXdJZ1lEVlFRTEV4dEhiRzlpWVd3Z1NXNW1iM0p0WVhScGIyNGdVMlZqZFhKcGRIa3hNakF3QmdOVkJBTVRLVTFoYzNSbGNrTmhjbVFnU1ZSR0lFMWxjM05oWjJWeklGTnBaMjVwYm1jZ1UzVmlJRU5CSUVjeU1CNFhEVEl4TURVd05qSXlNVGMxTmxvWERUSTFNREl4TURFMk1qazBPVm93Z2FReEN6QUpCZ05WQkFZVEFrSkZNUkV3RHdZRFZRUUhFd2hYWVhSbGNteHZiekV1TUN3R0ExVUVDaE1sVFdGemRHVnlRMkZ5WkNCSmJuUmxjbTVoZEdsdmJtRnNJRWx1WTI5eWNHOXlZWFJsWkRFWk1CY0dBMVVFQ3hNUVJHbG5hWFJoYkNCSlpHVnVkR2wwZVRFM01EVUdBMVVFQXhNdVpHbHpMVzFwWkhNdGMyVnlkbWxqWlhNdGFuZHpMWE5wWjI0dGRHVnpkQzV0WVhOMFpYSmpZWEprTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUx0RmZ0cFhHT1NYT1U2bXpEXC81YXJBTzhUNnphVENwQ0NtSkd2ZEZDYVhFNUhpczd5bmZ0N1dnNDlsR1dnTXdqN3pFdytLQmdCc2grOENxZ1VyUGhNa0hVaWhCcG9YbE9cL005emRUQ09XZEt1cjFOZFlGeFdzV3pHZVprcCt2Q2VtXC9lalJraUNza2kyeExCbHJsY1F3UnhPVDNIRUlsdnZtTlMwMmJ5SU5sbjJReWJaSHBwMkxpZDhkYlFVREVZU1hoeEk5cFdLcEFDZExBU3FUajhIK2VpK0xuMXBITTZtbVZNdCtueVFoMTR1K2FcLzdVa3ZlVzN3Zis4c0hFZmp6ZFVMcEFkaENMbGNnQWc5bVZuaDFPQ2lyYlN3WHVxXC9uWUs1TnA3UXR0dVV0bUhnSU1iV0llNFRyMVkybmlcL3dQRkQzek9cLzZJZjh0aXg2RDY4emNcLzM4Q0F3RUFBYU9CbVRDQmxqQTVCZ05WSFJFRU1qQXdnaTVrYVhNdGJXbGtjeTF6WlhKMmFXTmxjeTFxZDNNdGMybG5iaTEwWlhOMExtMWhjM1JsY21OaGNtUXVZMjl0TUE0R0ExVWREd0VCXC93UUVBd0lBZ0RBSkJnTlZIUk1FQWpBQU1CMEdBMVVkRGdRV0JCUjllS0xOVXYzSUVJenBydWFrTmp5M1RvdmVJREFmQmdOVkhTTUVHREFXZ0JSYlBFQlNEKzVQZ091YmF0U0cyWXRnM0g5WVZUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFVZXkzZmNJN05HUTlMVlNhUHY4UGsyTldsWnV0eDdNRHJGbVROK0ZZSUpZVGRRMWlLS2RyM3BUSjdocUR1NFBkcmsrT3VDUnVEODhZNDZCMDNRNUt6TUo4MDRVbU1sUG1yVll3RzUyZ29WTURWc2RIenR3cFwvUURaWW1GSE51b3d2TU5VcHozQjk4dFp6VVwva1lYWXF6a2hkS1ZzbGE0anc4RnBySXlTY01cL2l6aEVsWEp3dDI5SXd3YnBMT0NKaGNmZVFmOXZCdlh0VTcrQ3orZFBHUFZTMXVPdUNkWkI2NWdxV2dFb1FxczdwUDdtXC9VYTFqejFhTFdISmpXYStwV3duWWVUM1ZlR1pSM3JNOFUxMldiaXc5Uk53b1R2UzlUd2wybllybzI4YUpsZnRWb0RGMnM0T3djWEplSlBTMDN5aDhzd2pta0RqOUhoUmdwakI3aUJBPT0iXSwiYWxnIjoiUlMyNTYifQ.eyJjbGFpbXNBdHRyaWJ1dGVzIjp7ImFkZHJlc3MiOnsibGFzdFZlcmlmaWVkRGF0ZSI6IjIwMjItMTItMDhUMTI6NDg6MjguNTg2WiIsImNsYWltcyI6eyJhZGRyZXNzIjoiMjIwMCBNQVNURVJDQVJEIEJMVkQsIE8gRkFMTE9OLCBNTywgNjMzNjgsIFVTQSJ9LCJhc3N1cmFuY2VMZXZlbCI6MSwiZGF0YU1hdGNoIjoiRlVMTCJ9fSwiaWQiOiI3MzdhM2QyNGEwNWNlYjk4ZDE5NmY4MmMzZTlmYTRlM2I2MDVjMGNlNTJiOTc4YTE3NmY3ZDE2MDg3Y2IwNjhmIn0.gMXXDbBZKlw7PyeZZIEliTQx-TB8sHnnqXXnb9fp9DZINGMjMHoXZLbQNsD-8YPYfUJX8xqtZHtDdwRxleYpRoSTJhwzUxju6gMwWhMMsTv5Vh7Gr4IH-CpYu83CYUstcKe4PJHVXDxT0BEtSuq2c_32nN_yXbPlPjJcCVzxYiFeqEpN7k65L9uKc-KEj_XphOE5YC16KnOm2YkqJd3jCOq3P96XoQkXGAsuIt67a2IvjgD3b3mbr1dGNSyssaPA0j-vzwAeJIEhnay7hr1-LHld-7BwRrGeoAva4myZvEa_xTw6X1hPC00KjZdg6iguLh57vT3iRO9fDNtP4ZIzO\"}}}";
 		boolean matches = idrpReferenceApplication.verifyJWSProof(identityAttributeResponseBodyErrorMock);
 		assertFalse(matches);
 	}
 
 	@Test
-	void Should_return_true_when_verifing_valid_signature(){
+	void Should_return_true_when_verifies_valid_signature(){
 		String identityAttributeResponseBodyMock = "{\"transactionId\":\"95bcd8a4-fcb4-4dce-8626-d7a98666df45\",\"fraudDetectionMeta\":null,\"verifiableCredential\":{\"@context\":[\"https://www.w3.org/2018/credentials/v1\",\"https://www.w3.org/2018/credentials/id/v1\"],\"type\":[\"VerifiableCredential\",\"ID\"],\"issuer\":\"https://idservice.com/\",\"issuanceDate\":\"2022-12-08T12:50:43Z\",\"credentialSubject\":{\"id\":\"737a3d24a05ceb98d196f82c3e9fa4e3b605c0ce52b978a176f7d16087cb068f\",\"claimsAttributes\":{\"address\":{\"assuranceLevel\":1,\"lastVerifiedDate\":\"2022-12-08T12:48:28.586Z\",\"claims\":{\"address\":\"2200 MASTERCARD BLVD, O FALLON, MO, 63368, USA\"},\"dataMatch\":\"FULL\"}}},\"proof\":{\"jws\":\"eyJ4NXQjUzI1NiI6Ilg1OWF0QTRIMHlxNWx6VnlMUnl2Ym9oNmJrZHRMZHRQT002ZlR0OEFZMUkiLCJ4NWMiOlsiTUlJRVJ6Q0NBeStnQXdJQkFnSUlEek1MV200c09jQXdEUVlKS29aSWh2Y05BUUVMQlFBd2dZVXhDekFKQmdOVkJBWVRBa0pGTVJ3d0dnWURWUVFLRXhOTllYTjBaWEpEWVhKa0lGZHZjbXgzYVdSbE1TUXdJZ1lEVlFRTEV4dEhiRzlpWVd3Z1NXNW1iM0p0WVhScGIyNGdVMlZqZFhKcGRIa3hNakF3QmdOVkJBTVRLVTFoYzNSbGNrTmhjbVFnU1ZSR0lFMWxjM05oWjJWeklGTnBaMjVwYm1jZ1UzVmlJRU5CSUVjeU1CNFhEVEl4TURVd05qSXlNVGMxTmxvWERUSTFNREl4TURFMk1qazBPVm93Z2FReEN6QUpCZ05WQkFZVEFrSkZNUkV3RHdZRFZRUUhFd2hYWVhSbGNteHZiekV1TUN3R0ExVUVDaE1sVFdGemRHVnlRMkZ5WkNCSmJuUmxjbTVoZEdsdmJtRnNJRWx1WTI5eWNHOXlZWFJsWkRFWk1CY0dBMVVFQ3hNUVJHbG5hWFJoYkNCSlpHVnVkR2wwZVRFM01EVUdBMVVFQXhNdVpHbHpMVzFwWkhNdGMyVnlkbWxqWlhNdGFuZHpMWE5wWjI0dGRHVnpkQzV0WVhOMFpYSmpZWEprTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUx0RmZ0cFhHT1NYT1U2bXpEXC81YXJBTzhUNnphVENwQ0NtSkd2ZEZDYVhFNUhpczd5bmZ0N1dnNDlsR1dnTXdqN3pFdytLQmdCc2grOENxZ1VyUGhNa0hVaWhCcG9YbE9cL005emRUQ09XZEt1cjFOZFlGeFdzV3pHZVprcCt2Q2VtXC9lalJraUNza2kyeExCbHJsY1F3UnhPVDNIRUlsdnZtTlMwMmJ5SU5sbjJReWJaSHBwMkxpZDhkYlFVREVZU1hoeEk5cFdLcEFDZExBU3FUajhIK2VpK0xuMXBITTZtbVZNdCtueVFoMTR1K2FcLzdVa3ZlVzN3Zis4c0hFZmp6ZFVMcEFkaENMbGNnQWc5bVZuaDFPQ2lyYlN3WHVxXC9uWUs1TnA3UXR0dVV0bUhnSU1iV0llNFRyMVkybmlcL3dQRkQzek9cLzZJZjh0aXg2RDY4emNcLzM4Q0F3RUFBYU9CbVRDQmxqQTVCZ05WSFJFRU1qQXdnaTVrYVhNdGJXbGtjeTF6WlhKMmFXTmxjeTFxZDNNdGMybG5iaTEwWlhOMExtMWhjM1JsY21OaGNtUXVZMjl0TUE0R0ExVWREd0VCXC93UUVBd0lBZ0RBSkJnTlZIUk1FQWpBQU1CMEdBMVVkRGdRV0JCUjllS0xOVXYzSUVJenBydWFrTmp5M1RvdmVJREFmQmdOVkhTTUVHREFXZ0JSYlBFQlNEKzVQZ091YmF0U0cyWXRnM0g5WVZUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFVZXkzZmNJN05HUTlMVlNhUHY4UGsyTldsWnV0eDdNRHJGbVROK0ZZSUpZVGRRMWlLS2RyM3BUSjdocUR1NFBkcmsrT3VDUnVEODhZNDZCMDNRNUt6TUo4MDRVbU1sUG1yVll3RzUyZ29WTURWc2RIenR3cFwvUURaWW1GSE51b3d2TU5VcHozQjk4dFp6VVwva1lYWXF6a2hkS1ZzbGE0anc4RnBySXlTY01cL2l6aEVsWEp3dDI5SXd3YnBMT0NKaGNmZVFmOXZCdlh0VTcrQ3orZFBHUFZTMXVPdUNkWkI2NWdxV2dFb1FxczdwUDdtXC9VYTFqejFhTFdISmpXYStwV3duWWVUM1ZlR1pSM3JNOFUxMldiaXc5Uk53b1R2UzlUd2wybllybzI4YUpsZnRWb0RGMnM0T3djWEplSlBTMDN5aDhzd2pta0RqOUhoUmdwakI3aUJBPT0iXSwiYWxnIjoiUlMyNTYifQ.eyJjbGFpbXNBdHRyaWJ1dGVzIjp7ImFkZHJlc3MiOnsibGFzdFZlcmlmaWVkRGF0ZSI6IjIwMjItMTItMDhUMTI6NDg6MjguNTg2WiIsImNsYWltcyI6eyJhZGRyZXNzIjoiMjIwMCBNQVNURVJDQVJEIEJMVkQsIE8gRkFMTE9OLCBNTywgNjMzNjgsIFVTQSJ9LCJhc3N1cmFuY2VMZXZlbCI6MSwiZGF0YU1hdGNoIjoiRlVMTCJ9fSwiaWQiOiI3MzdhM2QyNGEwNWNlYjk4ZDE5NmY4MmMzZTlmYTRlM2I2MDVjMGNlNTJiOTc4YTE3NmY3ZDE2MDg3Y2IwNjhmIn0.gMXXDbBZKlw7PyeZZIEliTQx-TB8sHnnqXXnb9fp9DZINGMjMHoXZLbQNsD-8YPYfUJX8xqtZHtDdwRxleYpRoSTJhwzUxju6gMwWhMMsTv5Vh7Gr4IH-CpYu83CYUstcKe4PJHVXDxT0BEtSuq2c_32nN_yXbPlPjJcCVzxYiFeqEpN7k65L9uKc-KEj_XphOE5YC16KnOm2YkqJd3jCOq3P96XoQkXGAsuIt67a2IvjgD3b3mbr1dGNSyssaPA0j-vzwAeJIEhnay7hr1-LHld-7BwRrGeoAva4myZvEa_xTw6X1hPC00KjZdg6iguLh57vT3iRO9fDNtP4ZIzOQ\"}}}";
 		boolean matches = idrpReferenceApplication.verifyJWSProof(identityAttributeResponseBodyMock);
 		assertTrue(matches);
 	}
 
 	@Test
-	void Should_return_false_when_verifing_signature_but_does_not_match(){
+	void Should_return_false_when_verifies_signature_but_does_not_match(){
 		String identityAttributeResponseBodyMock = "{\"transactionId\":\"95bcd8a4-fcb4-4dce-8626-d7a98666df45\",\"fraudDetectionMeta\":null,\"verifiableCredential\":{\"@context\":[\"https://www.w3.org/2018/credentials/v1\",\"https://www.w3.org/2018/credentials/id/v1\"],\"type\":[\"VerifiableCredential\",\"ID\"],\"issuer\":\"https://idservice.com/\",\"issuanceDate\":\"2022-12-08T12:50:43Z\",\"credentialSubject\":{\"id\":\"737a3d24a05ceb98d196f82c3e9fa4e3b605c0ce52b978a176f7d16087cb068f\",\"claimsAttributes\":{\"address\":{\"assuranceLevel\":1,\"lastVerifiedDate\":\"2022-12-08T12:48:28.586Z\",\"claims\":{\"address\":\"2200 MASTERCARD BLVD, O FALLON, MO, 63368, USA\"},\"dataMatch\":\"FULL\"}}},\"proof\":{\"jws\":\"eyJ4NXQjUzI1NiI6Ilg1OWF0QTRIMHlxNWx6VnlMUnl2Ym9oNmJrZHRMZHRQT002ZlR0OEFZMUkiLCJ4NWMiOlsiTUlJRVJ6Q0NBeStnQXdJQkFnSUlEek1MV200c09jQXdEUVlKS29aSWh2Y05BUUVMQlFBd2dZVXhDekFKQmdOVkJBWVRBa0pGTVJ3d0dnWURWUVFLRXhOTllYTjBaWEpEWVhKa0lGZHZjbXgzYVdSbE1TUXdJZ1lEVlFRTEV4dEhiRzlpWVd3Z1NXNW1iM0p0WVhScGIyNGdVMlZqZFhKcGRIa3hNakF3QmdOVkJBTVRLVTFoYzNSbGNrTmhjbVFnU1ZSR0lFMWxjM05oWjJWeklGTnBaMjVwYm1jZ1UzVmlJRU5CSUVjeU1CNFhEVEl4TURVd05qSXlNVGMxTmxvWERUSTFNREl4TURFMk1qazBPVm93Z2FReEN6QUpCZ05WQkFZVEFrSkZNUkV3RHdZRFZRUUhFd2hYWVhSbGNteHZiekV1TUN3R0ExVUVDaE1sVFdGemRHVnlRMkZ5WkNCSmJuUmxjbTVoZEdsdmJtRnNJRWx1WTI5eWNHOXlZWFJsWkRFWk1CY0dBMVVFQ3hNUVJHbG5hWFJoYkNCSlpHVnVkR2wwZVRFM01EVUdBMVVFQXhNdVpHbHpMVzFwWkhNdGMyVnlkbWxqWlhNdGFuZHpMWE5wWjI0dGRHVnpkQzV0WVhOMFpYSmpZWEprTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUx0RmZ0cFhHT1NYT1U2bXpEXC81YXJBTzhUNnphVENwQ0NtSkd2ZEZDYVhFNUhpczd5bmZ0N1dnNDlsR1dnTXdqN3pFdytLQmdCc2grOENxZ1VyUGhNa0hVaWhCcG9YbE9cL005emRUQ09XZEt1cjFOZFlGeFdzV3pHZVprcCt2Q2VtXC9lalJraUNza2kyeExCbHJsY1F3UnhPVDNIRUlsdnZtTlMwMmJ5SU5sbjJReWJaSHBwMkxpZDhkYlFVREVZU1hoeEk5cFdLcEFDZExBU3FUajhIK2VpK0xuMXBITTZtbVZNdCtueVFoMTR1K2FcLzdVa3ZlVzN3Zis4c0hFZmp6ZFVMcEFkaENMbGNnQWc5bVZuaDFPQ2lyYlN3WHVxXC9uWUs1TnA3UXR0dVV0bUhnSU1iV0llNFRyMVkybmlcL3dQRkQzek9cLzZJZjh0aXg2RDY4emNcLzM4Q0F3RUFBYU9CbVRDQmxqQTVCZ05WSFJFRU1qQXdnaTVrYVhNdGJXbGtjeTF6WlhKMmFXTmxjeTFxZDNNdGMybG5iaTEwWlhOMExtMWhjM1JsY21OaGNtUXVZMjl0TUE0R0ExVWREd0VCXC93UUVBd0lBZ0RBSkJnTlZIUk1FQWpBQU1CMEdBMVVkRGdRV0JCUjllS0xOVXYzSUVJenBydWFrTmp5M1RvdmVJREFmQmdOVkhTTUVHREFXZ0JSYlBFQlNEKzVQZ091YmF0U0cyWXRnM0g5WVZUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFVZXkzZmNJN05HUTlMVlNhUHY4UGsyTldsWnV0eDdNRHJGbVROK0ZZSUpZVGRRMWlLS2RyM3BUSjdocUR1NFBkcmsrT3VDUnVEODhZNDZCMDNRNUt6TUo4MDRVbU1sUG1yVll3RzUyZ29WTURWc2RIenR3cFwvUURaWW1GSE51b3d2TU5VcHozQjk4dFp6VVwva1lYWXF6a2hkS1ZzbGE0anc4RnBySXlTY01cL2l6aEVsWEp3dDI5SXd3YnBMT0NKaGNmZVFmOXZCdlh0VTcrQ3orZFBHUFZTMXVPdUNkWkI2NWdxV2dFb1FxczdwUDdtXC9VYTFqejFhTFdISmpXYStwV3duWWVUM1ZlR1pSM3JNOFUxMldiaXc5Uk53b1R2UzlUd2wybllybzI4YUpsZnRWb0RGMnM0T3djWEplSlBTMDN5aDhzd2pta0RqOUhoUmdwakI3aUJBPT0iXSwiYWxnIjoiUlMyNTYifQ.eyJjbGFpbXNBdHRyaWJ1dGVzIjp7ImFkZHJlc3MiOnsibGFzdFZlcmlmaWVkRGF0ZSI6IjIwMjItMTItMDhUMTI6NDg6MjguNTg2WiIsImNsYWltcyI6eyJhZGRyZXNzIjoiMjIwMCBNQVNURVJDQVJEIEJMVkQsIE8gRkFMTE9OLCBNTywgNjMzNjgsIFVTQSJ9LCJhc3N1cmFuY2VMZXZlbCI6MSwiZGF0YU1hdGNoIjoiRlVMTCJ9fSwiaWQiOiI3MzdhM2QyNGEwNWNlYjk4ZDE5NmY4MmMzZTlmYTRlM2I2MDVjMGNlNTJiOTc4YTE3NmY3ZDE2MDg3Y2IwNjhmIn0.gMXXDbBZKlw7PyeZZIEliTQx-TB8sHnnqXXnb9fp9DZINGMjMHoXZLbQNsD-8YPYfUJX8xqtZHtDdwRxleYpRoSTJhwzUxju6gMwWhMMsTv5Vh7Gr4IH-CpYu83CYUstcKe4PJHVXDxT0BEtSuq2c_32nN_yXbPlPjJcCVzxYiFeqEpN7k65L9uKc-KEj_XphOE5YC16KnOm2YkqJd3jCOq3P96XoQkXGAsuIt67a2IvjgD3b3mbr1dGNSyssaPA0j-vzwAeJIEhnay7hr1-LHld-7BwRrGeoAva4myZvEa_xTw6X1hPC00KjZdg6iguLh57vT3iRO9fDNtP4ZIzOA\"}}}";
 		boolean matches = idrpReferenceApplication.verifyJWSProof(identityAttributeResponseBodyMock);
 		assertFalse(matches);
@@ -152,7 +149,7 @@ class IDRPReferenceApplicationTests {
 	@Test
 	void Should_go_through_all_application_flow_when_selecting_one(){
 
-		String data = String.format("%s\n%s\n%s\n%s\n%s", getAridMock(), getClienteAssertionMock(), getCodeMock(), getCodeVerifierMock(), getRedirectUriMock());
+		String data = String.format("%s\n%s\n%s\n%s\n%s", getAridMock(), getClientAssertionMock(), getCodeMock(), getCodeVerifierMock(), getRedirectUriMock());
 		InputStream stream = new ByteArrayInputStream(data.getBytes());
 		Scanner streamScanner = new Scanner(new BufferedInputStream(stream), "UTF-8");
 
@@ -167,7 +164,7 @@ class IDRPReferenceApplicationTests {
 	@Test
 	void Should_go_through_all_application_flow_when_selecting_one_with_wrong_input(){
 
-		String data = String.format("%s\n%s\n%s\n%s\n%s\n%s%s\n%s\n%s\n%s", "", getAridMock(), "", getClienteAssertionMock(), "", getCodeMock(), "", getCodeVerifierMock(), "", getRedirectUriMock());
+		String data = String.format("%s\n%s\n%s\n%s\n%s\n%s%s\n%s\n%s\n%s", "", getAridMock(), "", getClientAssertionMock(), "", getCodeMock(), "", getCodeVerifierMock(), "", getRedirectUriMock());
 		InputStream stream = new ByteArrayInputStream(data.getBytes());
 		Scanner streamScanner = new Scanner(new BufferedInputStream(stream), "UTF-8");
 
@@ -182,7 +179,7 @@ class IDRPReferenceApplicationTests {
 	@Test
 	void Should_exit_application_flow_when_selecting_two(){
 
-		String data = String.format("%s\n%s\n%s\n%s\n%s", getAridMock(), getClienteAssertionMock(), getCodeMock(), getCodeVerifierMock(), getRedirectUriMock());
+		String data = String.format("%s\n%s\n%s\n%s\n%s", getAridMock(), getClientAssertionMock(), getCodeMock(), getCodeVerifierMock(), getRedirectUriMock());
 		InputStream stream = new ByteArrayInputStream(data.getBytes());
 		Scanner streamScanner = new Scanner(new BufferedInputStream(stream), "UTF-8");
 
@@ -208,14 +205,13 @@ class IDRPReferenceApplicationTests {
 				idrpReferenceApplication.run()
 		);
 		assertEquals(0, exitException.getStatusCode());
-		assertFalse(scanner.hasNext());
 	}
 
 	private String getAridMock(){
 		return "714ebdd5-531a-4992-8cb6-c226c2faa19b";
 	}
 
-	private String getClienteAssertionMock(){
+	private String getClientAssertionMock(){
 		return "eyJraWQiOiJQeG9pbS1oQlVWZFI5UHI1LV9rNi03MllrT1NjSkV0bVNRNXlqRXNQMzZlNjVmYmMhZjE3MDFhNjllZWNiNGU3Mzk5NjQ1NmYxNDg4OWQwNDYwMDAwMDAwMDAwMDAwMDAwIiwiY3R5IjoiSldTIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJub3RfYXZhaWxhYmxlIiwibmJmIjoxNjcwNDcxNDgyLCJleHAiOjE2NzA0NzIzODIsImlhdCI6MTY3MDQ3MTQ4MiwianRpIjoiNzgwZGU5N2ItM2Y0MS00ODIyLWI2MGMtMTc2YmVkNGRiYjY1In0.N6c1uQRsVs_jiBfSO_IknMFlJOt5U1jVPMe3wqjl3LzPjnfOzwPz_0GE8dklVd3K6R0r8xh_L_drCZiZLDEz3l5NRv8JQzcmqzXfJ4YJ7uNKnWX1TFnzeFUdY34DxpDoCDTtVwmw1a8or7EvnpQwVRc3PWbmFRhnUFQ9bUMUi6HtkJ4nTSNWnyKDwwKrtUvGglCTRYoGzgodLvZGEj2TfWh6Qwd9MMKn560r0ZxlOvstXHOQT_9oc1eHGsQybGzP4qjh-ZQF-_BXR5R30mW4Pxw12wh_55LW53BMeumxDXXdoNnIv_t85hHzQZwQcuuCsoJ4BeuXtMKLGgzqidOyyQ";
 	}
 

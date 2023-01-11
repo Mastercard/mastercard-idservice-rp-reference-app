@@ -1,7 +1,7 @@
 package com.mastercard.dis.mids.reference.extension;
 
 public final class SystemExitException extends SecurityException {
-    private int statusCode;
+    private final int statusCode;
 
     public SystemExitException(int status) {
         super("System Exit call has been intercepted by SystemExitExtension");

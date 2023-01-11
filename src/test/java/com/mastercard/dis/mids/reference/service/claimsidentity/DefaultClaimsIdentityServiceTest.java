@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mastercard.dis.mids.reference.constants.AppConstants.X_MIDS_USERAUTH_SESSIONID;
+import static com.mastercard.dis.mids.reference.constants.Constants.X_MIDS_USERAUTH_SESSIONID;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -54,8 +54,8 @@ class DefaultClaimsIdentityServiceTest {
     private static final String ARID = "df52649e-4096-456a-bca0-751ee470009f";
     private static final String ACCESS_TOKEN = "jwt";
 
-     Map<String, List<String>> headers;
-     List<String> headersList;
+    Map<String, List<String>> headers;
+    List<String> headersList;
     @InjectMocks
     private DefaultClaimsIdentityService defaultClaimsIdentityService;
     @Mock
@@ -91,7 +91,7 @@ class DefaultClaimsIdentityServiceTest {
     }
 
     @Test
-    public void claimsIdentityAttributes_VerifyJWSGeneratedUsingCaasSignerStub() throws Exception {
+    void claimsIdentityAttributes_VerifyJWSGeneratedUsingCaasSignerStub() throws Exception {
 
         Response result = defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN);
         verify(apiClientMock, atMostOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());

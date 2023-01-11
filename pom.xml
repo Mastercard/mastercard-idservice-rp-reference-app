@@ -23,7 +23,6 @@
 		<gson-fire.version>1.8.5</gson-fire.version>
 		<oauth1-signer.version>1.5.2</oauth1-signer.version>
 		<swagger-parser.version>2.1.2</swagger-parser.version>
-		<client-encryption-version>1.4.0</client-encryption-version>
 		<openapi-generator.version>6.2.1</openapi-generator.version>
 		<javax-ws-version>2.1.1</javax-ws-version>
 		<json-smart.version>2.4.8</json-smart.version>
@@ -33,10 +32,8 @@
 		<sonar.projectKey>Mastercard_mastercard-idservice-rp-reference-app</sonar.projectKey>
 		<sonar.coverage.exclusions>
 			**/com/mastercard/dis/mids/reference/config/*,
-			**/com/mastercard/dis/mids/reference/interceptor/*,
 			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenResponseDTO.java,
 			**/com/mastercard/dis/mids/reference/service/sas/SasAccessTokenRequestDTO.java,
-			**/test/com/mastercard/dis/mids/reference/extension/*
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -58,12 +55,6 @@
 			<groupId>com.mastercard.developer</groupId>
 			<artifactId>oauth1-signer</artifactId>
 			<version>${oauth1-signer.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mastercard.developer</groupId>
-			<artifactId>client-encryption</artifactId>
-			<version>${client-encryption-version}</version>
 		</dependency>
 
 		<dependency>
@@ -139,9 +130,7 @@
 				<version>${surefire.version}</version>
 				<configuration>
 					<excludes>
-						<exclude>**/Application.java</exclude>
 						<exclude>**/config/*.java</exclude>
-						<exclude>**/integration/*.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -179,9 +168,6 @@
 					<excludes>
 						<exclude>
 							com.mastercard.dis.mids.reference.config.*
-						</exclude>
-						<exclude>
-							com.mastercard.dis.mids.reference.interceptor.*
 						</exclude>
 						<exclude>
 							com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO

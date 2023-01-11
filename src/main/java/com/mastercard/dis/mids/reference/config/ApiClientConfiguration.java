@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -57,6 +57,8 @@ public class ApiClientConfiguration {
     @Value("${mastercard.api.key.file}")
     private Resource keyFile;
 
+    private static PrivateKey signingKey;
+
     @PostConstruct
     public void initialize() {
         if (null == keyFile || StringUtils.isEmpty(consumerKey)) {
@@ -65,18 +67,16 @@ public class ApiClientConfiguration {
     }
 
     @Bean
-    public ApiClient apiClient( ) {
+    public ApiClient apiClient() {
         ApiClient client = new ApiClient();
         try {
-            PrivateKey signingKey = getPrivateKey();
             client.setBasePath(basePath);
             client.setDebugging(true);
             client.setReadTimeout(40000);
-            client.addDefaultHeader("downstream-route", "qe");
 
             return client.setHttpClient(client.getHttpClient()
                     .newBuilder()
-                    .addInterceptor(new OkHttpOAuth1Interceptor(consumerKey, signingKey))
+                    .addInterceptor(new OkHttpOAuth1Interceptor(consumerKey, getPrivateKey()))
                     .build()
             );
         } catch (Exception e) {
@@ -85,7 +85,11 @@ public class ApiClientConfiguration {
         }
     }
 
-    protected PrivateKey getPrivateKey() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
-        return AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
+    protected synchronized PrivateKey getPrivateKey() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+        if (null == signingKey){
+            signingKey = AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
+        }
+        assert null!= signingKey;
+        return signingKey;
     }
 }

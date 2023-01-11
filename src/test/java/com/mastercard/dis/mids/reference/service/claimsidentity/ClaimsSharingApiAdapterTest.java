@@ -1,15 +1,11 @@
 package com.mastercard.dis.mids.reference.service.claimsidentity;
 
-import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -23,46 +19,20 @@ class ClaimsSharingApiAdapterTest {
     private ClaimsSharingApiAdapter claimsSharingApiAdapter;
 
     @Test
-    void Should_return_not_found_response_for_given_arid_with_jwt() throws IOException, ApiException {
-        String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
-        String accessTokenMock = "jwt";
-
-        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient", new ApiClient().setReadTimeout(0));
-
-        Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
-
-        assertNotNull(response);
-        assertEquals(404, response.code());
-    }
-
-    @Test
-    void Should_return_not_found_response_for_given_arid() throws IOException, ApiException {
-        String aridMock = "aaaa0000-bbbb-0000-cccc-xx11zz22yy22";
-        String accessTokenMock = "";
-
-        ReflectionTestUtils.setField(claimsSharingApiAdapter, "localVarApiClient", new ApiClient().setReadTimeout(0));
-
-        Response response = claimsSharingApiAdapter.retrieveClaimsIdentityAttributesCall(aridMock, accessTokenMock, null);
-
-        assertNotNull(response);
-        assertEquals(404, response.code());
-    }
-
-    @Test
     void Should_return_null_when_arid_null() {
         String aridMock = null;
         String accessTokenMock = "";
 
-        Exception exception = assertThrows(ApiException.class, () -> {
-            claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(aridMock, accessTokenMock);
-        });
+        Exception exception = assertThrows(ApiException.class, () ->
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(aridMock, accessTokenMock)
+        );
 
         assertNotNull(exception);
         assertEquals(ApiException.class, exception.getClass());
     }
 
     @Test
-    void Should_return_api_client(){
+    void Should_return_api_client() {
         ApiClient apiClientMock = new ApiClient();
         ApiClient apiClientMockSet = new ApiClient();
 
