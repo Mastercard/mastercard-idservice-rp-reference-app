@@ -52,7 +52,7 @@ public class SasAccessTokenApi {
 
     public okhttp3.Call createSasAccessTokenCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback<?> apiCallback) throws ApiException {
 
-        String localVarPath = "/saat-auth/api/oauth2/token";
+        String localVarPath = String.format("/%s/%s/%s/%s", "saat-auth","api", "oauth2", "token");
 
         List<Pair> localVarQueryParams = new ArrayList<>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<>();
@@ -88,7 +88,7 @@ public class SasAccessTokenApi {
         if (sasAccessTokenRequest == null) {
             throw new ApiException("Missing the required parameter 'sasAccessTokenRequest' when calling createSasAccessToken(SasAccessTokenRequestDTO)");
         }
-        return  createSasAccessTokenCall(sasAccessTokenRequest, apiCallback);
+        return createSasAccessTokenCall(sasAccessTokenRequest, apiCallback);
     }
 
     public SasAccessTokenResponseDTO createSasAccessToken(SasAccessTokenRequestDTO sasAccessTokenRequest) throws ApiException {

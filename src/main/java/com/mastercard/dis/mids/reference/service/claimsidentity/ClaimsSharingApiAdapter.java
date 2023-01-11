@@ -76,11 +76,11 @@ public class ClaimsSharingApiAdapter {
             The issue from the generated code is that it does not parse the path with path parameter as expected.
          */
         // create path and map variables
-        String localVarPath = String.format("%s%s%s%s",
-                "/idservice-rp",
-                "/claims/",
+        String localVarPath = String.format("/%s/%s/%s/%s",
+                "idservice-rp",
+                "claims",
                 arid,
-                "/identity-attributes");
+                "identity-attributes");
 
         List<Pair> localVarQueryParams = new ArrayList<>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<>();
