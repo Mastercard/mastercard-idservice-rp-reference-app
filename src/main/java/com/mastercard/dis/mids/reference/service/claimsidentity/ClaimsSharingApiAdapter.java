@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, final ApiCallback apiCallback) throws ApiException, IOException {
+    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, final ApiCallback<?> apiCallback) throws ApiException, IOException {
         Object localVarPostBody = null;
 
         /*
@@ -76,18 +76,17 @@ public class ClaimsSharingApiAdapter {
             The issue from the generated code is that it does not parse the path with path parameter as expected.
          */
         // create path and map variables
-        String localVarPath = new StringBuilder()
-                .append("/idservice-rp")
-                .append("/claims/")
-                .append(arid)
-                .append("/identity-attributes")
-                .toString();
+        String localVarPath = String.format("%s%s%s%s",
+                "/idservice-rp",
+                "/claims/",
+                arid,
+                "/identity-attributes");
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        List<Pair> localVarQueryParams = new ArrayList<>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<>();
+        Map<String, String> localVarHeaderParams = new HashMap<>();
+        Map<String, String> localVarCookieParams = new HashMap<>();
+        Map<String, Object> localVarFormParams = new HashMap<>();
         final String[] localVarAccepts = {
                 "application/json"
         };
