@@ -50,7 +50,7 @@ For more information regarding the program, refer to [ID Service](https://idserv
 * Select all `.p12` files, `.pem` file and copy it to `src/main/resources` in the project folder.
 * Open `${project.basedir}/src/main/resources/application.properties` and configure below parameters.
     
-    >**mastercard.api.base.path=corresponding MC ID Service Url, example : https://sandbox.api.mastercard.com/mcidservice**, it is a static field, will be used as a host to make API calls.
+    >**mastercard.api.base.path=corresponding MC ID Service Url, example : `https://sandbox.api.mastercard.com/idservice-rp`**, it is a static field, will be used as a host to make API calls.
     
     **The properties below will be required for authentication of API calls.**
     
@@ -134,7 +134,7 @@ A - [Claims Sharing - Documentation](https://developer.mastercard.com/mastercard
     Once this endpoint returns a proof object containing a JWS. 
     You may validate this JWS using the below implementation.
     
-    - Here in method `verifyJWSProof` on [IDRPReferenceApplication.java](./src\main\java\com\mastercard\dis\mids\reference\IDRPReferenceApplication.java) we may see a use case to verify the signature
+    - Here in method `verifyJWSProof` on [IDRPReferenceApplication.java](./src\main\java\com\mastercard\dis\mids\reference\IDRPReferenceApplication.java) we may see a use case to verify the signature.
     
     - Also refer to `verify` in [SigningValidator.java](./src\main\java\com\mastercard\dis\mids\reference\service\claimsidentity\signingvalidator\SigningValidator.java) for more information.
     
