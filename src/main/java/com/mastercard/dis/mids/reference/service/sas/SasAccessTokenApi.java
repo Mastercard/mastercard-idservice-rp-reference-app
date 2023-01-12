@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -50,16 +50,15 @@ public class SasAccessTokenApi {
         this.localVarApiClient = apiClient;
     }
 
-    public okhttp3.Call createSasAccessTokenCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback apiCallback) throws ApiException {
-        Object localVarPostBody = sasAccessTokenRequest;
+    public okhttp3.Call createSasAccessTokenCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback<?> apiCallback) throws ApiException {
 
-        String localVarPath =  "/com-mastercard-saat/saat-auth/api/oauth2/token";
+        String localVarPath = String.format("/%s/%s/%s/%s", "saat-auth", "api", "oauth2", "token");
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        List<Pair> localVarQueryParams = new ArrayList<>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<>();
+        Map<String, String> localVarHeaderParams = new HashMap<>();
+        Map<String, String> localVarCookieParams = new HashMap<>();
+        Map<String, Object> localVarFormParams = new HashMap<>();
         final String[] localVarAccepts = {
                 "application/x-www-form-urlencoded"
         };
@@ -81,15 +80,15 @@ public class SasAccessTokenApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         String[] localVarAuthNames = new String[]{};
-        return localVarApiClient.buildCall(null, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
+        return localVarApiClient.buildCall(null, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, sasAccessTokenRequest, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call createSasAccessTokenBeforeCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback apiCallback) throws ApiException {
+    private okhttp3.Call createSasAccessTokenBeforeCall(SasAccessTokenRequestDTO sasAccessTokenRequest, final ApiCallback<?> apiCallback) throws ApiException {
         if (sasAccessTokenRequest == null) {
             throw new ApiException("Missing the required parameter 'sasAccessTokenRequest' when calling createSasAccessToken(SasAccessTokenRequestDTO)");
         }
-        return  createSasAccessTokenCall(sasAccessTokenRequest, apiCallback);
+        return createSasAccessTokenCall(sasAccessTokenRequest, apiCallback);
     }
 
     public SasAccessTokenResponseDTO createSasAccessToken(SasAccessTokenRequestDTO sasAccessTokenRequest) throws ApiException {

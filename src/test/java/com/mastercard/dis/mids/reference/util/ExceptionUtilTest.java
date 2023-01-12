@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -62,11 +62,11 @@ class ExceptionUtilTest {
         String exceptionMessage = "org.openapitools.client.ApiException";
         ErrorResponseErrorsErrorInner errorInner = new ErrorResponseErrorsErrorInner().source("mids").reasonCode("").description("").recoverable(false).details("");
         ErrorResponseErrors errorResponseErrors = new ErrorResponseErrors().addErrorItem(errorInner);
-        apiException = new ApiException(500,exceptionMessage, new HashMap<>(), errorResponseErrors.toString());
+        apiException = new ApiException(500, exceptionMessage, new HashMap<>(), errorResponseErrors.toString());
 
-        Exception exception = assertThrows(Exception.class, () -> {
-            exceptionUtil.logAndConvertToServiceException(apiException);
-        });
+        Exception exception = assertThrows(Exception.class, () ->
+                exceptionUtil.logAndConvertToServiceException(apiException)
+        );
 
         assertNotNull(exception);
     }

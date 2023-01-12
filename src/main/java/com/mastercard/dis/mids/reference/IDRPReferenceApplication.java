@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,20 +25,19 @@ import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsIdentityAt
 import com.mastercard.dis.mids.reference.service.claimsidentity.signingvalidator.SigningValidator;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
+import static com.mastercard.dis.mids.reference.constants.Constants.*;
 import static com.mastercard.dis.mids.reference.constants.Menu.MENU_MAP;
 
 @Slf4j
-@RequiredArgsConstructor
 @SpringBootApplication
 public class IDRPReferenceApplication implements CommandLineRunner {
 
@@ -46,13 +45,17 @@ public class IDRPReferenceApplication implements CommandLineRunner {
     private final IDRPReference idRpReference;
 
     private boolean exit = false;
-    private Scanner scanner = new Scanner(System.in, "UTF-8");;
+    private final Scanner scanner;
 
     private String arid;
-    private String redirectUri;
     private String code;
     private String clientAssertion;
     private String codeVerifier;
+
+    public IDRPReferenceApplication(IDRPReference idRpReference) {
+        this.idRpReference = idRpReference;
+        scanner = new Scanner(System.in, "UTF-8");
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(IDRPReferenceApplication.class);
@@ -61,12 +64,12 @@ public class IDRPReferenceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         while (!exit) {
             showMenu();
             handleOption(scanner.nextLine());
             pressAnyKey();
         }
+        scanner.close();
         System.exit(0);
     }
 
@@ -83,8 +86,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
     }
 
     private void takeArid(String aridScanned) {
-        String aridValidation="^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$";
-        if (aridScanned != null && !aridScanned.isEmpty() && aridScanned.matches(aridValidation)){
+        if (aridScanned != null && !aridScanned.isEmpty() && UUID_REGEX.matcher(aridScanned).matches()){
             log.info("Arid entered : " + aridScanned);
             arid = aridScanned;
             clientAssertionLogScanner();
@@ -100,8 +102,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
     }
 
     private void takeClientAssertion(String clientAssertionScanned) {
-        String clientAssertionValidation ="^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]*)";
-        if (clientAssertionScanned != null && !clientAssertionScanned.isEmpty() && clientAssertionScanned.matches(clientAssertionValidation)) {
+        if (clientAssertionScanned != null && !clientAssertionScanned.isEmpty() && JWT_REGEX.matcher(clientAssertionScanned).matches()) {
             log.info("Entered client assertion :  " + clientAssertionScanned);
             clientAssertion = clientAssertionScanned;
             codeLogScanner();
@@ -118,8 +119,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
 
     void takeCode(String codeScanned) {
         log.info("Code entered : " + codeScanned);
-        String codeValidation="^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]*)";
-        if (codeScanned != null && !codeScanned.isEmpty() && codeScanned.matches(codeValidation)) {
+        if (codeScanned != null && !codeScanned.isEmpty() && JWT_REGEX.matcher(codeScanned).matches()) {
             code = codeScanned;
             codeVerifierLogScanner();
             redirectUriLogScanner();
@@ -139,7 +139,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
         if (codeVerifierScanned != null && !codeVerifierScanned.isEmpty()) {
             codeVerifier = codeVerifierScanned;
         } else {
-            log.info("Invalid vode verifier entered, enter a valid code and press Enter");
+            log.info("Invalid code verifier entered, enter a valid code and press Enter");
             codeVerifierLogScanner();
         }
     }
@@ -151,10 +151,8 @@ public class IDRPReferenceApplication implements CommandLineRunner {
 
     private void takeRedirectUri(String redirectUriScanned) {
         log.info("Redirect Uri entered : " + redirectUriScanned);
-        String redirectUriValidation="^(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})$";
-        if (redirectUriScanned != null && !redirectUriScanned.isEmpty() && redirectUriScanned.matches(redirectUriValidation)) {
-            redirectUri = redirectUriScanned;
-            performClaimsIdentityAttributes(arid, clientAssertion, code, codeVerifier, redirectUri);
+        if (redirectUriScanned != null && !redirectUriScanned.isEmpty() && REDIRECT_URI_PATTERN.matcher(redirectUriScanned).matches()) {
+            performClaimsIdentityAttributes(arid, clientAssertion, code, codeVerifier, redirectUriScanned);
         } else {
             log.info("Invalid redirect uri entered, please enter a valid redirect uri and press Enter");
             redirectUriLogScanner();
@@ -188,7 +186,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
             SasAccessTokenResponseDTO sasAccessTokenResponseDTO = idRpReference.callSasAccessToken(sasAccessTokenRequestDTO);
 
             Response response = idRpReference.callClaimsIdentityAttributes(arid, sasAccessTokenResponseDTO.getAccess_token());
-            String responseBody = response.body().string();
+            String responseBody = Objects.requireNonNull(response.body()).string();
 
             log.info("<<--- Claims Identity Attributes Response --->>\n" + responseBody);
 
@@ -212,7 +210,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // ignore unnecessary properties
                     .readValue(identityAttrResponseBody, ClaimsIdentityAttributesResponseDTO.class);
 
-            matches = new SigningValidator().verify(responseDTO.getVerifiableCredential().getProof().getJws());
+            matches = new SigningValidator().verify(Objects.requireNonNull(responseDTO.getVerifiableCredential().getProof()).getJws());
             if (matches) {
                 log.info("<<--- Signature Verification Successful --->>");
             } else {
