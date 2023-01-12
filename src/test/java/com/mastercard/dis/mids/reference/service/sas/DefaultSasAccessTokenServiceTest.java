@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.service.sas;
 
-import com.mastercard.dis.mids.reference.constants.AppConstants;
+import com.mastercard.dis.mids.reference.constants.Constants;
 import com.mastercard.dis.mids.reference.exception.ServiceException;
 import com.mastercard.dis.mids.reference.session.SessionContext;
 import com.mastercard.dis.mids.reference.util.ExceptionUtil;
@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mastercard.dis.mids.reference.constants.AppConstants.X_MIDS_USERAUTH_SESSIONID;
+import static com.mastercard.dis.mids.reference.constants.Constants.X_MIDS_USERAUTH_SESSIONID;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -79,8 +79,8 @@ class DefaultSasAccessTokenServiceTest {
     void setUp() throws Exception {
         headers = new HashMap<>();
         headersList = new ArrayList<>();
-        headersList.add(AppConstants.X_MIDS_USERAUTH_SESSIONID);
-        headers.put(AppConstants.X_MIDS_USERAUTH_SESSIONID, headersList);
+        headersList.add(Constants.X_MIDS_USERAUTH_SESSIONID);
+        headers.put(Constants.X_MIDS_USERAUTH_SESSIONID, headersList);
         when(apiClientMock.buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).thenReturn(mock(Call.class));
         SessionContext.create(X_MIDS_USERAUTH_SESSIONID);
     }
