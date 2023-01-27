@@ -14,8 +14,8 @@
   * [Prerequisites](#prerequisites)
   * [Configuration](#configuration)
   * [Integrating with OpenAPI Generator](#integrating-with-openapi-generator)
-  * [OpenAPI Generator Plugin Configuration](#openAPI_generator_plugin_configuration)
-  * [Generating The API Client Sources](#generating_the_API_client_sources)
+  * [OpenAPI Generator Plugin Configuration](#openapi_generator_plugin_configuration)
+  * [Generating The API Client Sources](#generating_the_api_client_sources)
   * [Test Case Execution](#test-case-execute)
   * [Use Cases](#use-cases)
 - [API Reference](#api-reference)
@@ -71,7 +71,7 @@ See also:
 * [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
 * [CONFIG OPTIONS for java](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/java.md)
 
-#### OpenAPI Generator Plugin Configuration <a name="openAPI_generator_plugin_configuration"></a>
+#### OpenAPI Generator Plugin Configuration <a name="openapi_generator_plugin_configuration"></a>
 ```xml
 <!-- https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin -->
 <plugin>
@@ -99,7 +99,7 @@ See also:
 </plugin>
 ```
 
-#### Generating The API Client Sources <a name="generating_the_API_client_sources"></a>
+#### Generating The API Client Sources <a name="generating_the_api_client_sources"></a>
 Now that you have all the required dependencies, you can generate the sources. To do this, use one of the following two methods:
 
 `Using IDE`
