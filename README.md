@@ -14,8 +14,8 @@
   * [Prerequisites](#prerequisites)
   * [Configuration](#configuration)
   * [Integrating with OpenAPI Generator](#integrating-with-openapi-generator)
-  * [OpenAPI Generator Plugin Configuration](#openAPI_generator_plugin_configuration)
-  * [Generating The API Client Sources](#generating_the_API_client_sources)
+  * [OpenAPI Generator Plugin Configuration](#openapi-generator-plugin-configuration)
+  * [Generating The API Client Sources](#generating-the-api-client-sources)
   * [Test Case Execution](#test-case-execute)
   * [Use Cases](#use-cases)
 - [API Reference](#api-reference)
@@ -26,7 +26,7 @@
 - [License](#license)
 
 ## Overview <a name="overview"></a>
-ID is a digital identity service from Mastercard that helps you apply for, enroll in, log in to, and access services more simply, securely and privately. Rather than manually providing your information when you are trying to complete tasks online or in apps, ID enables you to share your verified information automatically, more securely, and with your consent and control. ID also enables you to do away with passwords and protects your personal information. Please see here for more details on the API: [Mastercard Developers](https://developer.mastercard.com/mastercard-id-service/documentation/).
+ID is a digital identity service from Mastercard that helps you apply for, enroll in, log in to, and access services more simply, securely and privately. Rather than manually providing your information when you are trying to complete tasks online or in apps, ID enables you to share your verified information automatically, more securely, and with your consent and control. ID also enables you to do away with passwords and protects your personal information. Please see here for more details on the API: [Mastercard Developers](https://developer.mastercard.com/mastercard-id-for-rp/documentation/).
 
 For more information regarding the program, refer to [ID Service](https://idservice.com/)
 
@@ -36,12 +36,12 @@ For more information regarding the program, refer to [ID Service](https://idserv
 
 ## Usage <a name="usage"></a>
 ### Prerequisites <a name="prerequisites"></a>
-* [Mastercard Developers Account](https://developer.mastercard.com/dashboard) with access to ID for Relying Parties API.
-* A text editor or IDE.
-* [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
-* [Spring Boot 2.2+ up to 2.7.x](https://spring.io/projects/spring-boot).
-* [Apache Maven 3.3+](https://maven.apache.org/download.cgi).
-* Set up the `JAVA_HOME` environment variable to match the location of your Java installation.
+* [Mastercard Developers Account](https://developer.mastercard.com/dashboard) with access to ID for Relying Parties API
+* IntelliJ IDEA (or any other IDE)
+* [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Spring Boot 2.2+ up to 2.7.x](https://spring.io/projects/spring-boot)
+* [Apache Maven 3.3+](https://maven.apache.org/download.cgi)
+* Set up the `JAVA_HOME` environment variable to match the location of your Java installation
 
 ### Configuration <a name="configuration"></a>
 * Create an account at [Mastercard Developers](https://developer.mastercard.com/account/sign-up).  
@@ -71,7 +71,7 @@ See also:
 * [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
 * [CONFIG OPTIONS for java](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/java.md)
 
-#### OpenAPI Generator Plugin Configuration <a name="openAPI_generator_plugin_configuration"></a>
+#### OpenAPI Generator Plugin Configuration <a name="openapi-generator-plugin-configuration"></a>
 ```xml
 <!-- https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin -->
 <plugin>
@@ -99,7 +99,7 @@ See also:
 </plugin>
 ```
 
-#### Generating The API Client Sources <a name="generating_the_API_client_sources"></a>
+#### Generating The API Client Sources <a name="generating-the-api-client-sources"></a>
 Now that you have all the required dependencies, you can generate the sources. To do this, use one of the following two methods:
 
 `Using IDE`
@@ -123,7 +123,7 @@ Below are the different APIs available in ID for Relying Parties Reference appli
 
 A - [Claims Sharing - Documentation](https://developer.mastercard.com/mastercard-id-for-rp/documentation/api-reference/#apis).
     
-- Please refer to `callClaimsIdentityAttributes` in [IDRPReference.java](./src\main\java\com\mastercard\dis\mids\reference\component\IDRPReference.java) for details from attached reference application.  
+- Please refer to `callClaimsIdentityAttributes` in [IDRPReference.java](./src/main/java/com/mastercard/dis/mids/reference/component/IDRPReference.java) for details from attached reference application.  
 
     URL      : `/idservice-rp/claims/{arid}/identity-attributes`
 
@@ -134,15 +134,15 @@ A - [Claims Sharing - Documentation](https://developer.mastercard.com/mastercard
     Once this endpoint returns a proof object containing a JWS. 
     You may validate this JWS using the below implementation.
     
-    - Here in method `verifyJWSProof` on [IDRPReferenceApplication.java](./src\main\java\com\mastercard\dis\mids\reference\IDRPReferenceApplication.java) we may see a use case to verify the signature.
+    - Here in method `verifyJWSProof` on [IDRPReferenceApplication.java](./src/main/java/com/mastercard/dis/mids/reference/IDRPReferenceApplication.java) we may see a use case to verify the signature.
     
-    - Also refer to `verify` in [SigningValidator.java](./src\main\java\com\mastercard\dis\mids\reference\service\claimsidentity\signingvalidator\SigningValidator.java) for more information.
+    - Also refer to `verify` in [SigningValidator.java](./src/main/java/com/mastercard/dis/mids/reference/service/claimsidentity/signingvalidator/SigningValidator.java) for more information.
     
         Example: [JWS Token](./docs/JWSToken.md)
 
 B - [Oauth 2.0 Access Token - Documentation](https://developer.mastercard.com/mastercard-id-for-rp/documentation/api-reference/#apis).
   
-- Please refer to `callSasAccessToken` in [IDRPReference.java](./src\main\java\com\mastercard\dis\mids\reference\component\IDRPReference.java) for details from attached reference application.
+- Please refer to `callSasAccessToken` in [IDRPReference.java](./src/main/java/com/mastercard/dis/mids/reference/component/IDRPReference.java) for details from attached reference application.
 
   URL      : `/saat-auth/oauth2/token`
 
@@ -172,9 +172,9 @@ It is recommended to create an instance of `ApiClient` per thread in a multithre
 ## Support <a name="support"></a>
 If you would like further information, please send an email to ` MC_ID@mastercard.com`
 - For information regarding licensing, refer to the [LICENSE](LICENSE.md).
-- For copyright information, refer to the [COPYRIGHT.md](COPYRIGHT.md).
+- For copyright information, refer to the [COPYRIGHT](COPYRIGHT.md).
 - For instructions on how to contribute to this project, refer to the [CONTRIBUTING](CONTRIBUTING.md).
-- For changelog information, refer to the [CHANGELOG.md](CHANGELOG.md).
+- For changelog information, refer to the [CHANGELOG](CHANGELOG.md).
 
 ## License <a name="license"></a>
 Copyright 2023 Mastercard
