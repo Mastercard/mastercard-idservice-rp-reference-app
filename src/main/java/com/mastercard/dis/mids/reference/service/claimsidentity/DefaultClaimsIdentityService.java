@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.service.claimsidentity;
 
-import com.mastercard.dis.mids.reference.session.SessionContext;
 import com.mastercard.dis.mids.reference.util.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.model.ClaimsIdentityAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.mastercard.dis.mids.reference.constants.AppConstants.X_MIDS_USERAUTH_SESSIONID;
+import java.io.IOException;
 
 @Slf4j
 @Service
@@ -41,13 +40,12 @@ public class DefaultClaimsIdentityService implements ClaimsIdentityService {
     }
 
     @Override
-    public ClaimsIdentityAttributes claimsIdentityAttributes(String arid, String accessToken) {
+    public Response claimsIdentityAttributes(String arid, String accessToken) {
         try {
             return claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken);
-        } catch (ApiException apiException) {
-            throw exceptionUtil.logAndConvertToServiceException(apiException);
+        } catch (ApiException | IOException apiException) {
+            throw exceptionUtil.logAndConvertToServiceException((ApiException) apiException);
         }
     }
-
 
 }

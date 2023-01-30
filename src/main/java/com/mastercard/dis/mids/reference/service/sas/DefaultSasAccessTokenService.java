@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ public class DefaultSasAccessTokenService implements SasAccessTokenService {
     @Autowired
     public DefaultSasAccessTokenService(ApiClient apiClient, ExceptionUtil exceptionUtil) {
         sasAccessTokenApi = new SasAccessTokenApi(apiClient);
-        sasAccessTokenApi.getApiClient().addDefaultHeader("Content-Type",  "application/x-www-form-urlencoded");
         this.exceptionUtil = exceptionUtil;
     }
 

@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.service.claimsidentity;
 
-import org.openapitools.client.model.ClaimsIdentityAttributes;
+import okhttp3.Response;
 
 public interface ClaimsIdentityService {
 
-    ClaimsIdentityAttributes claimsIdentityAttributes(String arid, String accessToken);
+    Response claimsIdentityAttributes(String arid, String accessToken);
 }

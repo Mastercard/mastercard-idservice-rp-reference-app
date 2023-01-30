@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +16,10 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.service.sas;
 
-import static com.mastercard.dis.mids.reference.constants.AppConstants.X_MIDS_USERAUTH_SESSIONID;
-import com.mastercard.dis.mids.reference.util.ExceptionUtil;
+import com.mastercard.dis.mids.reference.constants.Constants;
 import com.mastercard.dis.mids.reference.exception.ServiceException;
 import com.mastercard.dis.mids.reference.session.SessionContext;
-import com.mastercard.dis.mids.reference.constants.AppConstants;
-
+import com.mastercard.dis.mids.reference.util.ExceptionUtil;
 import okhttp3.Call;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mastercard.dis.mids.reference.constants.Constants.X_MIDS_USERAUTH_SESSIONID;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -60,7 +59,6 @@ class DefaultSasAccessTokenServiceTest {
     private static final String ID_TOKEN = "df52649e-4096-456a-bca0-751ee470009f";
     private static final String SCOPE = "read write";
     private static final String TOKEN_TYPE = "Bearer";
-    private static final String AUTH_CODE = "7189112-8987654";
 
     private static final int EXPIRES_IN = 3600;
 
@@ -81,9 +79,9 @@ class DefaultSasAccessTokenServiceTest {
     void setUp() throws Exception {
         headers = new HashMap<>();
         headersList = new ArrayList<>();
-        headersList.add(AppConstants.X_MIDS_USERAUTH_SESSIONID);
-        headers.put(AppConstants.X_MIDS_USERAUTH_SESSIONID, headersList);
-        when(apiClientMock.buildCall(anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).thenReturn(mock(Call.class));
+        headersList.add(Constants.X_MIDS_USERAUTH_SESSIONID);
+        headers.put(Constants.X_MIDS_USERAUTH_SESSIONID, headersList);
+        when(apiClientMock.buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).thenReturn(mock(Call.class));
         SessionContext.create(X_MIDS_USERAUTH_SESSIONID);
     }
 
@@ -93,10 +91,17 @@ class DefaultSasAccessTokenServiceTest {
                 .thenReturn(
                         new ApiResponse<>(200, headers, getSasAccessTokenResponse())
                 );
+        SasAccessTokenRequestDTO sasAccessTokenRequestDTO = new SasAccessTokenRequestDTO();
+        sasAccessTokenRequestDTO.setClientAssertionType("urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
+        sasAccessTokenRequestDTO.setClientAssertion("eyJraWQiOiJjdkF4d0FqaENJRnY5MFZnQ3M0b2o1Wmp2SmoyUlRXSC1sWHh3X2diMWRmMWV");
+        sasAccessTokenRequestDTO.setGrantType("authorization_code");
+        sasAccessTokenRequestDTO.setCodeVerifier("my-code-verifier-string");
+        sasAccessTokenRequestDTO.setCode("eyJ4NXQjUzI1NiI6Ild...");
+        sasAccessTokenRequestDTO.setRedirectUrl("https://venomsoft.ie");
 
-        SasAccessTokenResponseDTO result = sasAccessTokenService.sasAccessTokenResponse(SasAccessTokenRequestExample.sasAccessTokenRequestExample(AUTH_CODE));
+        SasAccessTokenResponseDTO result = sasAccessTokenService.sasAccessTokenResponse(sasAccessTokenRequestDTO);
 
-        verify(apiClientMock, atLeastOnce()).buildCall(anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
+        verify(apiClientMock, atLeastOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
         verify(apiClientMock, times(1)).execute(any(Call.class), any(Type.class));
         assertAll(
                 () -> assertNotNull(result),
@@ -116,7 +121,7 @@ class DefaultSasAccessTokenServiceTest {
         SasAccessTokenRequestDTO sasAccessTokenRequestDTO = new SasAccessTokenRequestDTO();
 
         assertThrows(ServiceException.class, () -> sasAccessTokenService.sasAccessTokenResponse(sasAccessTokenRequestDTO));
-        verify(apiClientMock, atLeastOnce()).buildCall(anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
+        verify(apiClientMock, atLeastOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
         verify(apiClientMock, atLeastOnce()).execute(any(Call.class), any(Type.class));
     }
 

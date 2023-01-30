@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,5 +42,11 @@ public class SasAccessTokenResponseDTO {
 
     @JsonProperty("token_type")
     private String token_type;
+
+    @JsonProperty("refresh_token")
+    private String refresh_token;
+
+    @JsonProperty("refresh_token_expires_in")
+    private String refreshTokenExpiresIn;
 
 }

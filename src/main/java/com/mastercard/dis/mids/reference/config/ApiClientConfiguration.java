@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.mastercard.dis.mids.reference.config;
 import com.mastercard.developer.interceptors.OkHttpOAuth1Interceptor;
 import com.mastercard.developer.utils.AuthenticationUtils;
 import com.mastercard.dis.mids.reference.exception.ServiceException;
-import com.mastercard.dis.mids.reference.interceptor.EncryptionDecryptionInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.client.ApiClient;
@@ -29,7 +28,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 /**
  * This is ApiClient configuration, it will read properties from application.properties and create instance of ApiClient.
@@ -53,6 +57,8 @@ public class ApiClientConfiguration {
     @Value("${mastercard.api.key.file}")
     private Resource keyFile;
 
+    private static PrivateKey signingKey;
+
     @PostConstruct
     public void initialize() {
         if (null == keyFile || StringUtils.isEmpty(consumerKey)) {
@@ -61,23 +67,29 @@ public class ApiClientConfiguration {
     }
 
     @Bean
-    public ApiClient apiClient(EncryptionDecryptionInterceptor encryptionDecryptionInterceptor) {
+    public ApiClient apiClient() {
         ApiClient client = new ApiClient();
         try {
-            PrivateKey signingKey = AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
             client.setBasePath(basePath);
             client.setDebugging(true);
             client.setReadTimeout(40000);
 
             return client.setHttpClient(client.getHttpClient()
                     .newBuilder()
-                    .addInterceptor(encryptionDecryptionInterceptor) // This interceptor will encrypt and decrypt the payload
-                    .addInterceptor(new OkHttpOAuth1Interceptor(consumerKey, signingKey))
+                    .addInterceptor(new OkHttpOAuth1Interceptor(consumerKey, getPrivateKey()))
                     .build()
             );
         } catch (Exception e) {
             log.error("Error occurred while configuring ApiClient", e);
             throw new ServiceException("Error occurred while configuring ApiClient", e);
         }
+    }
+
+    protected synchronized PrivateKey getPrivateKey() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+        if (null == signingKey){
+            signingKey = AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
+        }
+        assert null!= signingKey;
+        return signingKey;
     }
 }

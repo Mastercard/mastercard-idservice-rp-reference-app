@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021 Mastercard
+ Copyright (c) 2023 Mastercard
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ public final class Menu {
 
     static {
         MENU_MAP.put("1",  "1)   Claims Identity Attributes");
-        MENU_MAP.put("2",  "2)   Upcoming Flow");
-        MENU_MAP.put("3",  "3)   Exit");
+        MENU_MAP.put("2",  "2)   Exit");
     }
 }
