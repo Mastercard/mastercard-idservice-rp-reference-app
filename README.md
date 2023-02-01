@@ -100,10 +100,10 @@ See also:
 </plugin>
 ```
 #### Build the Project <a name="build-project"></a>
-Once you clone the project you have to make sure that IntelliJ IDEA recognise the folders. got to
+Once you clone the project you must ensure that IntelliJ IDEA recognizes the folders. Go to
 **(file > project structure > modules)** and select the folder `src/main/java` as a source and `src/test/java` as test folder,
-also check the language level at this configuration options and see if its select (8 - lambda type annotation etc.) following your java version
-add also the Maven support In the Project tool window, right-click your project and select Add Framework Support.
+also check the language level at this configuration options and see if it's selected (8 - lambda type annotation etc.) following your java version
+add also the Maven support in the Project tool window, right-click your project and select Add Framework Support.
 
 #### Generating The API Client Sources <a name="generating-the-api-client-sources"></a>
 Now that you have all the required dependencies, you can generate the sources. To do this, use one of the following two methods:
@@ -168,7 +168,7 @@ Guides and tutorials can be found [here](https://developer.mastercard.com/master
       - Run the tests.
    2. Select the menu options provided by the application
       - Run ```mvn spring-boot:run``` command to run the application.
-      - Once the application is running, you should be able to see and chose the follow three options:
+      - Once the application is running, you should be able to see and chose the follow two options:
           - 1 Claims Identity Attributes
           - 2 Exit
 
