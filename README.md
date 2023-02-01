@@ -15,12 +15,13 @@
   * [Configuration](#configuration)
   * [Integrating with OpenAPI Generator](#integrating-with-openapi-generator)
   * [OpenAPI Generator Plugin Configuration](#openapi-generator-plugin-configuration)
+  * [Build the Project](#build-project)
   * [Generating The API Client Sources](#generating-the-api-client-sources)
   * [Test Case Execution](#test-case-execute)
   * [Use Cases](#use-cases)
+  * [Execute the Use-Cases](#execute-use-cases)
 - [API Reference](#api-reference)
   * [Authorization](#authorization)
-  * [Request Examples](#request-examples)
   * [Recommendation](#recommendation)
 - [Support](#support)
 - [License](#license)
@@ -47,7 +48,7 @@ For more information regarding the program, refer to [ID Service](https://idserv
 * Create an account at [Mastercard Developers](https://developer.mastercard.com/account/sign-up).  
 * Create a new project and add `ID for Relying Parties` API to your project.   
 * Configure project and download all the keys. It will download multiple files.  
-* Select all `.p12` files, `.pem` file and copy it to `src/main/resources` in the project folder.
+* Select all `.p12` files and copy it to `src/main/resources` in the project folder.
 * Open `${project.basedir}/src/main/resources/application.properties` and configure below parameters.
     
     >**mastercard.api.base.path=corresponding MC ID Service Url, example : `https://sandbox.api.mastercard.com/idservice-rp`**, it is a static field, will be used as a host to make API calls.
@@ -98,6 +99,11 @@ See also:
     </executions>
 </plugin>
 ```
+#### Build the Project <a name="build-project"></a>
+Once you clone the project you have to make sure that IntelliJ IDEA recognise the folders. got to
+**(file > project structure > modules)** and select the folder `src/main/java` as a source and `src/test/java` as test folder,
+also check the language level at this configuration options and see if its select (8 - lambda type annotation etc.) following your java version
+add also the Maven support In the Project tool window, right-click your project and select Add Framework Support.
 
 #### Generating The API Client Sources <a name="generating-the-api-client-sources"></a>
 Now that you have all the required dependencies, you can generate the sources. To do this, use one of the following two methods:
@@ -154,6 +160,18 @@ Details on the inputs needed to run the reference app flow can be found [here](h
 
 Guides and tutorials can be found [here](https://developer.mastercard.com/mastercard-id-for-rp/documentation/tutorials-and-guides/).
 
+### Execute the Use-Cases <a name="execute-use-cases"></a>
+1. Run mvn clean install from the root of the project directory.
+2. There are two ways to execute the user cases :
+   1. Execute the test cases
+      - At the `src/test/java` which is the main root folder for all Junit tests of the application.
+      - Run the tests.
+   2. Select the menu options provided by the application
+      - Run ```mvn spring-boot:run``` command to run the application.
+      - Once the application is running, you should be able to see and chose the follow three options:
+          - 1 Claims Identity Attributes
+          - 2 Exit
+
 ## API Reference <a name="api-reference"></a>
 
 - To develop a client application that consumes a RESTful ID Service API with Spring Boot, refer to the documentation below.
@@ -162,15 +180,11 @@ Guides and tutorials can be found [here](https://developer.mastercard.com/master
 ### Authorization <a name="authorization"></a>
 The `com.mastercard.dis.mids.reference.config` package will provide you API client. This class will take care of adding the correct `Authorization` header before sending the request.
 
-### Request Examples <a name="request-examples"></a>
-You can change the default input passed to APIs, modify values in following file:
-* `com.mastercard.dis.mids.reference.constants.Constants`
-
 ### Recommendation <a name="recommendation"></a>
 It is recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issues.
 
 ## Support <a name="support"></a>
-If you would like further information, please send an email to ` MC_ID@mastercard.com`
+If you would like further information, please send an email to `apisupport@mastercard.com`
 - For information regarding licensing, refer to the [LICENSE](LICENSE.md).
 - For copyright information, refer to the [COPYRIGHT](COPYRIGHT.md).
 - For instructions on how to contribute to this project, refer to the [CONTRIBUTING](CONTRIBUTING.md).
