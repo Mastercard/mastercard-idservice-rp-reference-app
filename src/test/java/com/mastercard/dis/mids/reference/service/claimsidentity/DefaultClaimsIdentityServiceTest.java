@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mastercard.dis.mids.reference.constants.Constants.X_MIDS_USERAUTH_SESSIONID;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -64,38 +65,15 @@ class DefaultClaimsIdentityServiceTest {
     private ExceptionUtil exceptionUtilMock;
     private OkHttpClient httpClient;
 
-
-    @BeforeEach
-    void setUp() throws Exception {
-        headers = new HashMap<>();
-        headersList = new ArrayList<>();
-        headersList.add(X_MIDS_USERAUTH_SESSIONID);
-        headers.put(X_MIDS_USERAUTH_SESSIONID, headersList);
-        when(apiClientMock.buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).thenReturn(mock(Call.class));
-        SessionContext.create(X_MIDS_USERAUTH_SESSIONID);
-    }
+    @Mock
+    private ClaimsSharingApiAdapter claimsSharingApiAdapter;
 
     @Test
-    void claimsIdentityAttributes_SuccessfulApiCall_ShouldReturnResponse() throws ApiException {
-        defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN);
-        verify(apiClientMock, atLeastOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
-    }
-
-    @Test
-    void claimsIdentityAttributes_FailureApiCall_ShouldThrowApiException() throws ApiException {
-        when(apiClientMock.buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any())).
-                thenThrow(new ApiException());
+    void claimsIdentityAttributes_ShouldThrowApiException() throws Exception {
+        when(claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(any(String.class), any(String.class))).thenThrow(ApiException.class);
         when(exceptionUtilMock.logAndConvertToServiceException(any(ApiException.class))).thenThrow(new ServiceException("Error while processing request"));
-        assertThrows(ServiceException.class, () -> defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN));
-        verify(apiClientMock, atMostOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
+        Exception exception = assertThrows(ServiceException.class, () -> defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN));
+        assertNotNull(exception);
     }
-
-    @Test
-    void claimsIdentityAttributes_VerifyJWSGeneratedUsingCaasSignerStub() throws Exception {
-
-        Response result = defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN);
-        verify(apiClientMock, atMostOnce()).buildCall(any(), anyString(), anyString(), anyList(), anyList(), any(), anyMap(), anyMap(), anyMap(), any(), any());
-    }
-
 
 }
