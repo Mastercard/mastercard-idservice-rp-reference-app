@@ -25,6 +25,7 @@ import org.openapitools.client.ApiCallback;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.Pair;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class ClaimsSharingApiAdapter {
     public ApiClient getApiClient() {
         return localVarApiClient;
     }
+
+    @Value("${mastercard.client.decryption.enable:false}")
+    private boolean decryptionEnabled;
 
     public void setApiClient(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
@@ -102,6 +106,7 @@ public class ClaimsSharingApiAdapter {
         localVarHeaderParams.put("Content-Type", localVarContentType);
         String[] localVarAuthNames = new String[]{};
         localVarHeaderParams.put("Authorization", "Bearer " +accessToken);
+        localVarHeaderParams.put("X-Encrypted-Payload", String.valueOf(decryptionEnabled));
         if (accessToken.equals("jwt")) {
             okhttp3.Call localVarCall = localVarApiClient.buildCall(null, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
             return localVarCall.execute();

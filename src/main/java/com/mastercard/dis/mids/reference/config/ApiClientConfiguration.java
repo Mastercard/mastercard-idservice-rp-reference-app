@@ -19,6 +19,7 @@ package com.mastercard.dis.mids.reference.config;
 import com.mastercard.developer.interceptors.OkHttpOAuth1Interceptor;
 import com.mastercard.developer.utils.AuthenticationUtils;
 import com.mastercard.dis.mids.reference.exception.ServiceException;
+import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsSharingApiAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.client.ApiClient;
@@ -85,11 +86,16 @@ public class ApiClientConfiguration {
         }
     }
 
+    @Bean
+    public ClaimsSharingApiAdapter claimsSharingApiAdapter(ApiClient apiClient) {
+        return new ClaimsSharingApiAdapter(apiClient);
+    }
+
     protected synchronized PrivateKey getPrivateKey() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
-        if (null == signingKey){
+        if (null == signingKey) {
             signingKey = AuthenticationUtils.loadSigningKey(keyFile.getFile().getAbsolutePath(), keystoreAlias, keystorePassword);
         }
-        assert null!= signingKey;
+        assert null != signingKey;
         return signingKey;
     }
 }

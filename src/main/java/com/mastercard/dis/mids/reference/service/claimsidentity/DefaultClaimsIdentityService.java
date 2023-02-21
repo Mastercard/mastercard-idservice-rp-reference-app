@@ -19,7 +19,6 @@ package com.mastercard.dis.mids.reference.service.claimsidentity;
 import com.mastercard.dis.mids.reference.util.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
-import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +33,8 @@ public class DefaultClaimsIdentityService implements ClaimsIdentityService {
     private final ExceptionUtil exceptionUtil;
 
     @Autowired
-    public DefaultClaimsIdentityService(ApiClient apiClient, ExceptionUtil exceptionUtil) {
-        claimsSharingApiAdapter = new ClaimsSharingApiAdapter(apiClient);
+    public DefaultClaimsIdentityService(ClaimsSharingApiAdapter claimSharingApiAdapter, ExceptionUtil exceptionUtil) {
+        claimsSharingApiAdapter = claimSharingApiAdapter;
         this.exceptionUtil = exceptionUtil;
     }
 

@@ -16,13 +16,24 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.component;
 
+import com.mastercard.developer.utils.AuthenticationUtils;
+import com.mastercard.dis.mids.reference.exception.ServiceException;
 import com.mastercard.dis.mids.reference.service.claimsidentity.ClaimsIdentityService;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenRequestDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenResponseDTO;
 import com.mastercard.dis.mids.reference.service.sas.SasAccessTokenService;
+import com.mastercard.dis.mids.reference.util.EncryptionUtils;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.security.interfaces.RSAPrivateKey;
 
 @Component
 @RequiredArgsConstructor
@@ -31,11 +42,35 @@ public class IDRPReference {
     private final ClaimsIdentityService claimsIdentityService;
     private final SasAccessTokenService sasAccessTokenService;
 
+    @Value("${mastercard.api.decryption.keystore}")
+    private Resource decryptionKeystore;
+
+    @Value("${mastercard.api.decryption.alias}")
+    private String decryptionKeystoreAlias;
+
+    @Value("${mastercard.api.decryption.keystore.password}")
+    private String decryptionKeystorePassword;
+
     public Response callClaimsIdentityAttributes(String arid, String accessToken) {
         return claimsIdentityService.claimsIdentityAttributes(arid, accessToken);
     }
 
     public SasAccessTokenResponseDTO callSasAccessToken(SasAccessTokenRequestDTO sasAccessTokenRequestDTO) {
         return sasAccessTokenService.sasAccessTokenResponse(sasAccessTokenRequestDTO);
+    }
+
+    public String decryptClaimsIdentityAttributesBody(String encryptedBody) {
+        RSAPrivateKey signingKey;
+        JSONObject parse;
+        try{
+            signingKey = (RSAPrivateKey) AuthenticationUtils.loadSigningKey(new FileInputStream(decryptionKeystore.getFile()), decryptionKeystoreAlias, decryptionKeystorePassword);
+            parse = (JSONObject) JSONValue.parse(encryptedBody);
+
+        }catch (FileNotFoundException e){
+            throw new ServiceException(".p12 Key not found", e);
+        }catch (Exception e){
+            throw new ServiceException("Unable to decrypt response from server", e);
+        }
+        return EncryptionUtils.jweDecrypt(parse.getAsString("encryptedData"), signingKey);
     }
 }
