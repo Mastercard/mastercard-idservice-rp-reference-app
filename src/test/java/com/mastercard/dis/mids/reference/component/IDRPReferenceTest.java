@@ -26,6 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -76,8 +78,9 @@ class IDRPReferenceTest {
     }
 
     @Test
-    @DisplayName("Claims Identity Attributes Return Exception")
-    void decryptClaimsIdentityAttributesBodyException() {
+    @DisplayName("Call Decrypt Claims Identity Attributes - Null Key Store Value - Service Exception")
+    void CallDecryptClaimsIdentityAttributes_NullKeyStoreValue_ServiceException() {
+        ReflectionTestUtils.setField(idRpReference, "decryptionKeystore", null);
         Exception exception = assertThrows(ServiceException.class, () ->
                 idRpReference.decryptClaimsIdentityAttributesBody(ENCRYPTED_BODY)
         );
@@ -85,4 +88,18 @@ class IDRPReferenceTest {
         assertEquals(ServiceException.class, exception.getClass());
     }
 
+    @Test
+    @DisplayName("Call Decrypt Claims Identity Attributes - Not Valid Key Store Value - Service Exception")
+    void CallDecryptClaimsIdentityAttributes_NotValidKeyStoreValue_ServiceException() {
+        ClassPathResource decryptPath = new ClassPathResource("/encryption-mc-RP.p12");
+        ReflectionTestUtils.setField(idRpReference, "decryptionKeystore", decryptPath);
+        ReflectionTestUtils.setField(idRpReference, "decryptionKeystoreAlias", "Alias");
+        ReflectionTestUtils.setField(idRpReference, "decryptionKeystorePassword", "KeyAlias");
+        Exception exception = assertThrows(ServiceException.class, () ->
+                idRpReference.decryptClaimsIdentityAttributesBody(ENCRYPTED_BODY)
+        );
+
+        assertNotNull(exception);
+        assertEquals(ServiceException.class, exception.getClass());
+    }
 }

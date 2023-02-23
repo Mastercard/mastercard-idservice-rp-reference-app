@@ -16,38 +16,22 @@ limitations under the License.
 
 package com.mastercard.dis.mids.reference.util;
 
-
 import com.mastercard.developer.encryption.EncryptionException;
 import com.mastercard.developer.encryption.JweConfig;
 import com.mastercard.developer.encryption.JweConfigBuilder;
-import com.mastercard.developer.encryption.jwe.JweHeader;
 import com.mastercard.developer.encryption.jwe.JweObject;
 import com.mastercard.developer.json.JsonEngine;
 import com.mastercard.dis.mids.reference.exception.ServiceException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.cert.Certificate;
 import java.security.interfaces.RSAPrivateKey;
-
-import static com.mastercard.developer.utils.EncryptionUtils.loadEncryptionCertificate;
 
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EncryptionUtils {
-
-
-    public static String jweEncrypt(String plainData, Resource certificateFile, String keyFingerPrint) {
-        try {
-            return encryptWithPublicKey(plainData, keyFingerPrint, certificateFile.getFile().getPath());
-        } catch (IOException e) {
-            throw new ServiceException(e.getMessage());
-        }
-    }
 
     public static String jweDecrypt(String cipher, RSAPrivateKey privateKeyFile) {
         try {
@@ -58,25 +42,6 @@ public class EncryptionUtils {
             JweObject jwe = JweObject.parse(cipher, JsonEngine.getDefault());
             return jwe.decrypt(config);
         } catch (GeneralSecurityException | EncryptionException e) {
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    private static String encryptWithPublicKey(String plainData, String keyFingerPrint, String certificateFilePath) {
-        // Encrypt the JWE with the RSA public key + specified AES CEK
-        final JweHeader jweHeader = new JweHeader(
-                "RSA-OAEP-256",
-                "A128GCM",
-                keyFingerPrint, null);
-
-        try {
-            Certificate encCert = loadEncryptionCertificate(certificateFilePath);
-            JweConfig config = JweConfigBuilder.aJweEncryptionConfig()
-                    .withEncryptionCertificate(encCert)
-                    .withEncryptionKeyFingerprint(keyFingerPrint)
-                    .build();
-            return JweObject.encrypt(config, plainData, jweHeader);
-        } catch (IOException | GeneralSecurityException | EncryptionException e) {
             throw new ServiceException(e.getMessage());
         }
     }
