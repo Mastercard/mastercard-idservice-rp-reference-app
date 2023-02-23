@@ -60,14 +60,16 @@ public class IDRPReference {
     }
 
     public String decryptClaimsIdentityAttributesBody(String encryptedBody) {
-        RSAPrivateKey signingKey;
         JSONObject parse;
+        RSAPrivateKey signingKey;
         try{
-            signingKey = (RSAPrivateKey) AuthenticationUtils.loadSigningKey(new FileInputStream(decryptionKeystore.getFile()), decryptionKeystoreAlias, decryptionKeystorePassword);
             parse = (JSONObject) JSONValue.parse(encryptedBody);
+            signingKey = (RSAPrivateKey) AuthenticationUtils.loadSigningKey(new FileInputStream(decryptionKeystore.getFile()), decryptionKeystoreAlias, decryptionKeystorePassword);
 
-        }catch (FileNotFoundException e){
+        }catch (FileNotFoundException e) {
             throw new ServiceException(".p12 Key not found", e);
+        }catch (NullPointerException e){
+            throw new ServiceException("NullPointerException", e);
         }catch (Exception e){
             throw new ServiceException("Unable to decrypt response from server", e);
         }
