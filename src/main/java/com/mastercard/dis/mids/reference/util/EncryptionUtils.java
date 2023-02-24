@@ -36,12 +36,12 @@ public class EncryptionUtils {
     public static String jweDecrypt(String cipher, RSAPrivateKey privateKeyFile) {
         try {
             // Decrypt JWE with CEK directly, with the DirectDecrypter in promiscuous mode
+            JweObject jwe = JweObject.parse(cipher, JsonEngine.getDefault());
             JweConfig config = JweConfigBuilder.aJweEncryptionConfig()
                     .withDecryptionKey(privateKeyFile)
                     .build();
-            JweObject jwe = JweObject.parse(cipher, JsonEngine.getDefault());
             return jwe.decrypt(config);
-        } catch (GeneralSecurityException | EncryptionException e) {
+        } catch (GeneralSecurityException | EncryptionException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
     }

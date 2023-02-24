@@ -5,19 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.KeyStoreSpi;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPrivateKey;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class EncryptionUtilsTest {
@@ -26,13 +15,9 @@ class EncryptionUtilsTest {
     KeyStore keyStore;
 
     @Test
-    void whenTryToDecryptWithInvalidKey_thenThrowsException() throws CertificateException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {
-        KeyStoreSpi keyStoreSpiMock = mock(KeyStoreSpi.class);
-        this.keyStore = new KeyStore(keyStoreSpiMock, null, "test"){};
-        keyStore.load(null);
-        RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyStore.getKey(anyString(), any(char[].class));
+    void whenTryToDecryptWithInvalidKey_thenThrowsException() {
 
-        assertThatThrownBy(() -> EncryptionUtils.jweDecrypt("Invalid Encrypted Object", rsaPrivateKey))
+        assertThatThrownBy(() -> EncryptionUtils.jweDecrypt("eyJraWQiOiJmMWU2MjczZTVkOWNiZTdkNzBiY2I3OGVkMDdiZWQ4MmU2ZjdiZGM1NTIyYTFjYTc1ZjEzMGFjNzIxNzc3ZDU4IiwiZW5jIjoiQTEyOEdDTSIsImFsZyI6IlJTQS1PQUVQLTI1NiJ9.eyJlbmNyeXB0ZWRPYmplY3QiOiJUZXN0IE9iamVjdCJ9.xRl2g9V-9owAdRR_.ROrXH1T0NsF9AGNZPwY9CgQ-KLepVQsjnlZkDzYbVNnQrtt_3YMGnVGOyVnuhm17XrKfp04h1_8AW-rT8wHZCbjC4Bskg9ab4OF6PVH2vQv1b409C0rr4XjRAJ6W4rXdj9ZeYI6_JmNyp04JVu3gFVDe0FKPydY.nGAcTSeH2ry-XQlpuAMnKw", null))
                 .hasMessage("You must include at least an encryption certificate or a decryption key");
     }
 }
