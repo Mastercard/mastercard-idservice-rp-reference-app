@@ -73,7 +73,7 @@ public class IDRPReference {
             throw new ServiceException(".p12 Key not found", e);
         }catch (NullPointerException e){
             throw new ServiceException("NullPointerException", e);
-        }catch (Exception e){// Service exception já resolve o da main
+        }catch (Exception e){
             throw new ServiceException("Unable to decrypt response from server", e);
         }
         return EncryptionUtils.jweDecrypt(parse.getAsString("encryptedData"), signingKey);

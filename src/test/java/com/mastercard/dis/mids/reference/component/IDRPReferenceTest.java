@@ -32,6 +32,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -86,6 +87,7 @@ class IDRPReferenceTest {
         );
         assertNotNull(exception);
         assertEquals(ServiceException.class, exception.getClass());
+        assertTrue(exception.getMessage().contains("NullPointerException"));
     }
 
     @Test
@@ -101,5 +103,26 @@ class IDRPReferenceTest {
 
         assertNotNull(exception);
         assertEquals(ServiceException.class, exception.getClass());
+        assertTrue(exception.getMessage().contains(".p12 Key not found"));
+    }
+
+    @Test
+    @DisplayName("Call Decrypt Claims Identity Attributes - Invalid Encrypted Body - Service Exception")
+    void CallDecryptClaimsIdentityAttributes_InvalidEncryptedBody_ServiceException(){
+        Exception exception = assertThrows(ServiceException.class, () ->
+                idRpReference.decryptClaimsIdentityAttributesBody("Invalid Encrypted Body")
+        );
+
+        assertNotNull(exception);
+        assertEquals(ServiceException.class, exception.getClass());
+        assertTrue(exception.getMessage().contains("Unable to decrypt response from server"));
+    }
+
+    @Test
+    @DisplayName("Call Decrypt Claims Identity Attributes - Valid - Decryption Enabled")
+    void CallDecryptClaimsIdentityAttributes_Valid_DecryptionEnabled(){
+        ReflectionTestUtils.setField(idRpReference, "decryptionEnabled", true);
+
+        assertTrue(idRpReference.isDecryptionEnabled());
     }
 }
