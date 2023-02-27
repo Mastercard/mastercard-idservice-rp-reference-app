@@ -60,9 +60,9 @@ class DefaultClaimsIdentityServiceTest {
 
     @Test
     void claimsIdentityAttributes_ShouldThrowApiException() throws Exception {
-        when(claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(any(String.class), any(String.class), any(Boolean.class))).thenThrow(ApiException.class);
+        when(claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(any(String.class), any(String.class))).thenThrow(ApiException.class);
         when(exceptionUtilMock.logAndConvertToServiceException(any(ApiException.class))).thenThrow(new ServiceException("Error while processing request"));
-        Exception exception = assertThrows(ServiceException.class, () -> defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN,false));
+        Exception exception = assertThrows(ServiceException.class, () -> defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN));
         assertNotNull(exception);
     }
 

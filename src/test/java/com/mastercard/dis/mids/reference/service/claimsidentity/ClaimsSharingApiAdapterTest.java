@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 class ClaimsSharingApiAdapterTest {
 
     @InjectMocks
-    private ClaimsSharingApiAdapter claimsSharingApiAdapter;
+    private ClaimsSharingApiAdapter claimsSharingApiAdapter = new ClaimsSharingApiAdapter(new ApiClient(), false);
 
     @Mock
     private ApiClient mockApiClient;
@@ -39,7 +39,7 @@ class ClaimsSharingApiAdapterTest {
         String accessTokenMock = "";
 
         Exception exception = assertThrows(ApiException.class, () ->
-                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(aridMock, accessTokenMock, false)
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(aridMock, accessTokenMock)
         );
 
         assertNotNull(exception);
@@ -52,7 +52,7 @@ class ClaimsSharingApiAdapterTest {
         ApiClient apiClientMock = new ApiClient();
         ApiClient apiClientMockSet = new ApiClient();
 
-        ClaimsSharingApiAdapter claimsSharingApiAdapterMock = new ClaimsSharingApiAdapter(apiClientMock);
+        ClaimsSharingApiAdapter claimsSharingApiAdapterMock = new ClaimsSharingApiAdapter(apiClientMock, false);
         claimsSharingApiAdapterMock.setApiClient(apiClientMockSet);
 
         ApiClient client = claimsSharingApiAdapterMock.getApiClient();
@@ -86,7 +86,7 @@ class ClaimsSharingApiAdapterTest {
         )).thenThrow(ApiException.class);
 
         ApiException exception = assertThrows(ApiException.class, () ->
-                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken, false));
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken));
 
         assertNotNull(exception);
         assertEquals(ApiException.class, exception.getClass());
@@ -102,7 +102,7 @@ class ClaimsSharingApiAdapterTest {
         when(mockApiClient.selectHeaderAccept(localVarAccepts)).thenReturn(localVarAccepts[0]);
 
         Exception exception = assertThrows(Exception.class, () ->
-                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken, false));
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken));
 
         assertNotNull(exception);
         assertEquals(NullPointerException.class, exception.getClass());

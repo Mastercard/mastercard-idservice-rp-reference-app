@@ -20,5 +20,5 @@ import okhttp3.Response;
 
 public interface ClaimsIdentityService {
 
-    Response claimsIdentityAttributes(String arid, String accessToken, boolean isDecryptionEnabled);
+    Response claimsIdentityAttributes(String arid, String accessToken);
 }

@@ -42,7 +42,10 @@ public class ClaimsSharingApiAdapter {
 
     private ApiClient localVarApiClient;
 
-    public ClaimsSharingApiAdapter(ApiClient apiClient) {
+    private boolean isDecryptionEnabled;
+
+    public ClaimsSharingApiAdapter(ApiClient apiClient, boolean isDecryptionEnabled) {
+        this.isDecryptionEnabled = isDecryptionEnabled;
         this.localVarApiClient = apiClient;
     }
 
@@ -68,7 +71,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, boolean isDecryptionEnabled, final ApiCallback<?> apiCallback) throws ApiException, IOException {
+    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, final ApiCallback<?> apiCallback) throws ApiException, IOException {
         Object localVarPostBody = null;
 
         /*
@@ -115,12 +118,12 @@ public class ClaimsSharingApiAdapter {
     }
 
     @SuppressWarnings("rawtypes")
-    private Response retrieveClaimsIdentityAttributesValidateBeforeCall(String arid, String accessToken, boolean isDecryptionEnabled, final ApiCallback apiCallback) throws ApiException, IOException {
+    private Response retrieveClaimsIdentityAttributesValidateBeforeCall(String arid, String accessToken, final ApiCallback apiCallback) throws ApiException, IOException {
         // verify the required parameter 'arid' is set
         if (arid == null) {
             throw new ApiException("Missing the required parameter 'arid' when calling retrieveClaimsIdentityAttributes(Async)");
         }
-        return retrieveClaimsIdentityAttributesCall(arid, accessToken, isDecryptionEnabled, apiCallback);
+        return retrieveClaimsIdentityAttributesCall(arid, accessToken, apiCallback);
     }
 
     /**
@@ -137,7 +140,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public Response retrieveClaimsIdentityAttributes(String arid, String accessToken, boolean isDecryptionEnabled) throws ApiException, IOException {
-        return retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, isDecryptionEnabled, null);
+    public Response retrieveClaimsIdentityAttributes(String arid, String accessToken) throws ApiException, IOException {
+        return retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, null);
     }
 }

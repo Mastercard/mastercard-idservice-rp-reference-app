@@ -58,6 +58,9 @@ public class ApiClientConfiguration {
     @Value("${mastercard.api.key.file}")
     private Resource keyFile;
 
+    @Value("${mastercard.client.decryption.enable}")
+    private boolean isDecryptionEnabled;
+
     private static PrivateKey signingKey;
 
     @PostConstruct
@@ -88,7 +91,7 @@ public class ApiClientConfiguration {
 
     @Bean
     public ClaimsSharingApiAdapter claimsSharingApiAdapter(ApiClient apiClient) {
-        return new ClaimsSharingApiAdapter(apiClient);
+        return new ClaimsSharingApiAdapter(apiClient, this.isDecryptionEnabled);
     }
 
     protected synchronized PrivateKey getPrivateKey() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {

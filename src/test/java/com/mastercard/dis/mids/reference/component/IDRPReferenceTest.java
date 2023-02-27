@@ -59,7 +59,7 @@ class IDRPReferenceTest {
         ReflectionTestUtils.setField(idRpReference, "decryptionEnabled", false);
         idRpReference.callClaimsIdentityAttributes(ARID, ACCESS_TOKEN);
 
-        verify(claimsIdentityServiceMock, times(1)).claimsIdentityAttributes(eq(ARID), eq(ACCESS_TOKEN), eq(idRpReference.isDecryptionEnabled()));
+        verify(claimsIdentityServiceMock, times(1)).claimsIdentityAttributes(eq(ARID), eq(ACCESS_TOKEN));
         verifyNoMoreInteractions(claimsIdentityServiceMock);
     }
 
