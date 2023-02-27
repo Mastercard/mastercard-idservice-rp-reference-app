@@ -422,7 +422,7 @@ components:
     AccessTokenRequestBody:
       description: Form parameters required to exchange access token
       content:
-        application/x-www-form-urlencoded:
+        application/json:
           schema:
             $ref: '#/components/schemas/AccessTokenPayload'
       required: true
