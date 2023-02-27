@@ -56,9 +56,10 @@ class IDRPReferenceTest {
     @Test
     @DisplayName("Call Claims Identity Attributes API - Valid - Successful")
     void callClaimsIdentityAttributes_Valid_SuccessfulCall() {
+        ReflectionTestUtils.setField(idRpReference, "decryptionEnabled", false);
         idRpReference.callClaimsIdentityAttributes(ARID, ACCESS_TOKEN);
 
-        verify(claimsIdentityServiceMock, times(1)).claimsIdentityAttributes(eq(ARID), eq(ACCESS_TOKEN));
+        verify(claimsIdentityServiceMock, times(1)).claimsIdentityAttributes(eq(ARID), eq(ACCESS_TOKEN), eq(idRpReference.isDecryptionEnabled()));
         verifyNoMoreInteractions(claimsIdentityServiceMock);
     }
 

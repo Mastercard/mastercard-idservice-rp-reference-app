@@ -25,7 +25,6 @@ import org.openapitools.client.ApiCallback;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.Pair;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,9 +50,6 @@ public class ClaimsSharingApiAdapter {
         return localVarApiClient;
     }
 
-    @Value("${mastercard.client.decryption.enable:false}")
-    private boolean decryptionEnabled;
-
     public void setApiClient(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
     }
@@ -72,7 +68,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, final ApiCallback<?> apiCallback) throws ApiException, IOException {
+    public Response retrieveClaimsIdentityAttributesCall(String arid, String accessToken, boolean isDecryptionEnabled, final ApiCallback<?> apiCallback) throws ApiException, IOException {
         Object localVarPostBody = null;
 
         /*
@@ -104,7 +100,7 @@ public class ClaimsSharingApiAdapter {
         localVarHeaderParams.put("Content-Type", localVarContentType);
         String[] localVarAuthNames = new String[]{};
         localVarHeaderParams.put("Authorization", "Bearer " +accessToken);
-        localVarHeaderParams.put("X-Encrypted-Payload", String.valueOf(decryptionEnabled));
+        localVarHeaderParams.put("X-Encrypted-Payload", String.valueOf(isDecryptionEnabled));
         if (accessToken.equals("jwt")) {
             okhttp3.Call localVarCall = localVarApiClient.buildCall(null, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
             return localVarCall.execute();
@@ -119,12 +115,12 @@ public class ClaimsSharingApiAdapter {
     }
 
     @SuppressWarnings("rawtypes")
-    private Response retrieveClaimsIdentityAttributesValidateBeforeCall(String arid, String accessToken, final ApiCallback apiCallback) throws ApiException, IOException {
+    private Response retrieveClaimsIdentityAttributesValidateBeforeCall(String arid, String accessToken, boolean isDecryptionEnabled, final ApiCallback apiCallback) throws ApiException, IOException {
         // verify the required parameter 'arid' is set
         if (arid == null) {
             throw new ApiException("Missing the required parameter 'arid' when calling retrieveClaimsIdentityAttributes(Async)");
         }
-        return retrieveClaimsIdentityAttributesCall(arid, accessToken,  apiCallback);
+        return retrieveClaimsIdentityAttributesCall(arid, accessToken, isDecryptionEnabled, apiCallback);
     }
 
     /**
@@ -141,7 +137,7 @@ public class ClaimsSharingApiAdapter {
     <tr><td> 404 </td><td> Request didn&#39;t match an existing resource. </td><td>  -  </td></tr>
     </table>
      */
-    public Response retrieveClaimsIdentityAttributes(String arid, String accessToken) throws ApiException, IOException {
-        return retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, null);
+    public Response retrieveClaimsIdentityAttributes(String arid, String accessToken, boolean isDecryptionEnabled) throws ApiException, IOException {
+        return retrieveClaimsIdentityAttributesValidateBeforeCall(arid, accessToken, isDecryptionEnabled, null);
     }
 }

@@ -39,7 +39,7 @@ class ClaimsSharingApiAdapterTest {
         String accessTokenMock = "";
 
         Exception exception = assertThrows(ApiException.class, () ->
-                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(aridMock, accessTokenMock)
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(aridMock, accessTokenMock, false)
         );
 
         assertNotNull(exception);
@@ -86,7 +86,7 @@ class ClaimsSharingApiAdapterTest {
         )).thenThrow(ApiException.class);
 
         ApiException exception = assertThrows(ApiException.class, () ->
-                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken));
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken, false));
 
         assertNotNull(exception);
         assertEquals(ApiException.class, exception.getClass());
@@ -102,7 +102,7 @@ class ClaimsSharingApiAdapterTest {
         when(mockApiClient.selectHeaderAccept(localVarAccepts)).thenReturn(localVarAccepts[0]);
 
         Exception exception = assertThrows(Exception.class, () ->
-                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken));
+                claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken, false));
 
         assertNotNull(exception);
         assertEquals(NullPointerException.class, exception.getClass());

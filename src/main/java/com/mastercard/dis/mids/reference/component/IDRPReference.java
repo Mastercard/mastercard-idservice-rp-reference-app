@@ -55,7 +55,7 @@ public class IDRPReference {
     private boolean decryptionEnabled;
 
     public Response callClaimsIdentityAttributes(String arid, String accessToken) {
-        return claimsIdentityService.claimsIdentityAttributes(arid, accessToken);
+        return claimsIdentityService.claimsIdentityAttributes(arid, accessToken, isDecryptionEnabled());
     }
 
     public SasAccessTokenResponseDTO callSasAccessToken(SasAccessTokenRequestDTO sasAccessTokenRequestDTO) {

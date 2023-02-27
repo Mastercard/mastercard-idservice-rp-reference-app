@@ -39,9 +39,9 @@ public class DefaultClaimsIdentityService implements ClaimsIdentityService {
     }
 
     @Override
-    public Response claimsIdentityAttributes(String arid, String accessToken) {
+    public Response claimsIdentityAttributes(String arid, String accessToken, boolean isDecryptionEnabled) {
         try {
-            return claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken);
+            return claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(arid, accessToken, isDecryptionEnabled);
         } catch (ApiException | IOException apiException) {
             throw exceptionUtil.logAndConvertToServiceException((ApiException) apiException);
         }

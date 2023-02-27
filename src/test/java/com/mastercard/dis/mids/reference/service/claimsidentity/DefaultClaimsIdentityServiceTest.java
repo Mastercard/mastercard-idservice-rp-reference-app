@@ -31,22 +31,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mastercard.dis.mids.reference.constants.Constants.X_MIDS_USERAUTH_SESSIONID;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,9 +60,9 @@ class DefaultClaimsIdentityServiceTest {
 
     @Test
     void claimsIdentityAttributes_ShouldThrowApiException() throws Exception {
-        when(claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(any(String.class), any(String.class))).thenThrow(ApiException.class);
+        when(claimsSharingApiAdapter.retrieveClaimsIdentityAttributes(any(String.class), any(String.class), any(Boolean.class))).thenThrow(ApiException.class);
         when(exceptionUtilMock.logAndConvertToServiceException(any(ApiException.class))).thenThrow(new ServiceException("Error while processing request"));
-        Exception exception = assertThrows(ServiceException.class, () -> defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN));
+        Exception exception = assertThrows(ServiceException.class, () -> defaultClaimsIdentityService.claimsIdentityAttributes(ARID, ACCESS_TOKEN,false));
         assertNotNull(exception);
     }
 
