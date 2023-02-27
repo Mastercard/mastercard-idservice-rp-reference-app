@@ -192,7 +192,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
             String responseBody = Objects.requireNonNull(response.body()).string();
 
             log.info("<<--- Claims Identity Attributes Response --->>\n" + responseBody);
-            if (responseBody.contains("encryptedData\":\"")) {
+            if (idRpReference.isDecryptionEnabled()) {
                 log.info("<<--- Decrypted Response --->>\n");
                 responseBody = idRpReference.decryptClaimsIdentityAttributesBody(responseBody);
                 log.info(responseBody);
