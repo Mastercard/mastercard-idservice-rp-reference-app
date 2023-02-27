@@ -8,9 +8,9 @@ info:
     url: 'https://developer.mastercard.com/support'
   version: '1.0'
 servers:
-  - url: 'https://api.mastercard.com/idservice-rp'
-    description: Production server (uses live data)
-  - url: 'https://sandbox.api.mastercard.com/idservice-rp'
+  - url: 'https://api.mastercard.com.au'
+    description: Production server (uses live data).
+  - url: 'https://sandbox.api.mastercard.com.au'
     description: Sandbox server (testing environment)
 tags:
   - name: Claims Sharing
@@ -36,6 +36,7 @@ paths:
       operationId: retrieveClaimsIdentityAttributes
       parameters:
         - $ref: '#/components/parameters/AridParameter'
+        - $ref: '#/components/parameters/XEncryptedPayload'
   '/saat-auth/oauth2/token':
     post:
       summary: Authorization server accepts a request, performs client credential validation, and issues an access token to the client application.
@@ -51,7 +52,7 @@ paths:
       description: |
         This API can be used to exchange an auth code (when grant type is
         authorization_code) or a refresh token (when grant type is
-        refresh_token) for an access token.\
+        refresh_token) for an access token.   
         **This API is mandatory.**
       operationId: issueAccessToken
       requestBody:
@@ -175,7 +176,9 @@ components:
       description: An object representing the generated JWS token.
       properties:
         jws:
-          description: Generated JWS token of the "credentialSubject" JSON Object.
+          description: |
+            Generated JWS token of the "credentialSubject" JSON Object,   
+            it's signature is generated using a SHA-256 hash of "credentialSubject".
           example: eyJraWQiOiJVTklUX1RFU1RfS0VZX0FMSUFTIiwiYWxnIjoiUlMyNTYifQ..
           type: string
           minLength: 1
@@ -410,15 +413,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ClaimsIdentityAttributes'
+          examples:
+            ClaimsIdentityAttributesSuccessResponseUnencryptedExample:
+              $ref: '#/components/examples/ClaimsIdentityAttributesResponseExample'
+            ClaimsIdentityAttributesSuccessResponseEncryptedExample:
+              $ref: '#/components/examples/EncryptedPayloadNoPDSExample'
   requestBodies:
     AccessTokenRequestBody:
       description: Form parameters required to exchange access token
       content:
-        application/json:
+        application/x-www-form-urlencoded:
           schema:
             $ref: '#/components/schemas/AccessTokenPayload'
       required: true
   examples:
+    EncryptedPayloadNoPDSExample:
+      value:
+        encryptedData: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyf
     NotFoundExample:
       value:
         Errors:
@@ -461,6 +472,39 @@ components:
                 'kid' otherwise request is considered unauthorized
         error: invalid_kid_in_token_header
         errorDescription: Invalid claim 'kid' in token header
+    ClaimsIdentityAttributesResponseExample:
+      value:
+        transactionId: 1ec14310-e85c-11ea-adc1-0242ac120002
+        verifiableCredential:
+          '@context':
+            - https://www.w3.org/2018/credentials/v1
+            - https://www.w3.org/2018/credentials/id/v1
+          type:
+            - VerifiableCredential
+            - ID
+          issuer: https://idservice.com/
+          issuanceDate: '2021-01-01T13:23:33Z'
+          credentialSubject:
+            id: 0a58579bce2c6c4a9e413acaa7c4d53f9002ee69c736626dc9b48db50c6eb8ac
+            claimsAttributes:
+              legalName:
+                assuranceLevel: 1
+                lastVerifiedDate: '2021-01-01T13:23:33Z'
+                claims:
+                  legalName: SMITH,JOHN
+                dataMatch: FULL
+              address:
+                claims:
+                  address: NO_DATA
+              dataMatch: NOT_AVAILABLE
+          proof:
+            jws: eyJraWQiOiJVTklUX1RFU1RfS0VZX0FMSUFTIiwiYWxnIjoiUlMyNTYifQ..
+        fraudDetectionMeta:
+          score:
+            value: 0
+            band: GREEN
+            signals:
+              - anonymous_ip
   parameters:
     AridParameter:
       name: arid
@@ -473,3 +517,11 @@ components:
         minLength: 36
         type: string
         pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
+    XEncryptedPayload:
+      in: header
+      name: X-Encrypted-Payload
+      example: true
+      description: |
+        Indicator that request is encrypted or to indicate that client is able to receive a encrypted response. If not set, payload will treated as plaintext.
+      schema:
+        type: boolean
