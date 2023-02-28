@@ -30,11 +30,14 @@ import okhttp3.Response;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.mastercard.dis.mids.reference.constants.Constants.*;
+import static com.mastercard.dis.mids.reference.constants.Constants.JWT_REGEX;
+import static com.mastercard.dis.mids.reference.constants.Constants.REDIRECT_URI_PATTERN;
+import static com.mastercard.dis.mids.reference.constants.Constants.UUID_REGEX;
 import static com.mastercard.dis.mids.reference.constants.Menu.MENU_MAP;
 
 @Slf4j
@@ -86,7 +89,7 @@ public class IDRPReferenceApplication implements CommandLineRunner {
     }
 
     private void takeArid(String aridScanned) {
-        if (aridScanned != null && !aridScanned.isEmpty() && UUID_REGEX.matcher(aridScanned).matches()){
+        if (aridScanned != null && !aridScanned.isEmpty() && UUID_REGEX.matcher(aridScanned).matches()) {
             log.info("Arid entered : " + aridScanned);
             arid = aridScanned;
             clientAssertionLogScanner();
@@ -189,6 +192,11 @@ public class IDRPReferenceApplication implements CommandLineRunner {
             String responseBody = Objects.requireNonNull(response.body()).string();
 
             log.info("<<--- Claims Identity Attributes Response --->>\n" + responseBody);
+            if (idRpReference.isDecryptionEnabled()) {
+                log.info("<<--- Decrypted Response --->>\n");
+                responseBody = idRpReference.decryptClaimsIdentityAttributesBody(responseBody);
+                log.info(responseBody);
+            }
 
             // Optional: to verify the proof (JWS) see the function below
             verifyJWSProof(responseBody);

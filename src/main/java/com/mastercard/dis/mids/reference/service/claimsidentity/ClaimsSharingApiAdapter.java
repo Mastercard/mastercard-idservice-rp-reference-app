@@ -42,7 +42,10 @@ public class ClaimsSharingApiAdapter {
 
     private ApiClient localVarApiClient;
 
-    public ClaimsSharingApiAdapter(ApiClient apiClient) {
+    private boolean isDecryptionEnabled;
+
+    public ClaimsSharingApiAdapter(ApiClient apiClient, boolean isDecryptionEnabled) {
+        this.isDecryptionEnabled = isDecryptionEnabled;
         this.localVarApiClient = apiClient;
     }
 
@@ -95,13 +98,12 @@ public class ClaimsSharingApiAdapter {
             localVarHeaderParams.put("Accept", localVarAccept);
         }
 
-        final String[] localVarContentTypes = {
-
-        };
+        final String[] localVarContentTypes = {};
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
         String[] localVarAuthNames = new String[]{};
         localVarHeaderParams.put("Authorization", "Bearer " +accessToken);
+        localVarHeaderParams.put("X-Encrypted-Payload", String.valueOf(isDecryptionEnabled));
         if (accessToken.equals("jwt")) {
             okhttp3.Call localVarCall = localVarApiClient.buildCall(null, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, apiCallback);
             return localVarCall.execute();
@@ -121,7 +123,7 @@ public class ClaimsSharingApiAdapter {
         if (arid == null) {
             throw new ApiException("Missing the required parameter 'arid' when calling retrieveClaimsIdentityAttributes(Async)");
         }
-        return retrieveClaimsIdentityAttributesCall(arid, accessToken,  apiCallback);
+        return retrieveClaimsIdentityAttributesCall(arid, accessToken, apiCallback);
     }
 
     /**

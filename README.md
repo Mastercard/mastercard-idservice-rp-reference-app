@@ -50,18 +50,30 @@ For more information regarding the program, refer to [ID Service](https://idserv
 * Configure project and download all the keys. It will download multiple files.  
 * Select all `.p12` files and copy it to `src/main/resources` in the project folder.
 * Open `${project.basedir}/src/main/resources/application.properties` and configure below parameters.
-    
+
+   **Authentication**
+
     >**mastercard.api.base.path=corresponding MC ID Service Url, example : `https://sandbox.api.mastercard.com/idservice-rp`**, it is a static field, will be used as a host to make API calls.
     
     **The properties below will be required for authentication of API calls.**
     
-    >**mastercard.api.key.file=** this refers to .p12 file found in the signing key. Please place .p12 file at src\main\resources in the project folder and add classpath for .p12 file.
+    >**mastercard.api.key.file=**, this refers to .p12 file found in the signing key. Please place .p12 file at src\main\resources in the project folder and add classpath for .p12 file.
     
-    >**mastercard.api.consumer.key=** this refers to your consumer key. Copy it from "Keys" section on your project page in [Mastercard Developers](https://developer.mastercard.com/dashboard)
+    >**mastercard.api.consumer.key=**, this refers to your consumer key. Copy it from "Keys" section on your project page in [Mastercard Developers](https://developer.mastercard.com/dashboard)
       
     >**mastercard.api.keystore.alias=keyalias**, this is the default value of key alias. If it is modified, use the updated one from keys section in [Mastercard Developers](https://developer.mastercard.com/dashboard).
     
     >**mastercard.api.keystore.password=keystorepassword**, this is the default value of key alias. If it is modified, use the updated one from keys section in [Mastercard Developers](https://developer.mastercard.com/dashboard).
+
+  **Decryption**
+
+  >**mastercard.api.decryption.keystore=classpath:**, copy your downloaded .p12 file to src/main/resources and set value as "classpath:keyalias-encryption-mc.p12"
+
+  >**mastercard.api.decryption.alias=**, alias of your key. Default key alias for sandbox is `keyalias`.
+
+  >**mastercard.api.decryption.keystore.password=**, password of your Keystore. Default keystore password for sandbox project is `keystorepassword`.
+
+  >**server.port=**, application port.
 
 ### Integrating with OpenAPI Generator <a name="integrating-with-openapi-generator"></a>
 [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) generates API client libraries from [OpenAPI Specs](https://github.com/OAI/OpenAPI-Specification). 

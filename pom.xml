@@ -22,6 +22,7 @@
 		<okhttp3.version>4.9.3</okhttp3.version>
 		<gson-fire.version>1.8.5</gson-fire.version>
 		<oauth1-signer.version>1.5.2</oauth1-signer.version>
+		<client-encryption-version>1.7.7</client-encryption-version>
 		<swagger-parser.version>2.1.2</swagger-parser.version>
 		<openapi-generator.version>6.2.1</openapi-generator.version>
 		<javax-ws-version>2.1.1</javax-ws-version>
@@ -43,6 +44,12 @@
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<version>${javax-ws-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mastercard.developer</groupId>
+			<artifactId>client-encryption</artifactId>
+			<version>${client-encryption-version}</version>
 		</dependency>
 
 		<dependency>
